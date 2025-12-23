@@ -1,0 +1,408 @@
+<div
+  class="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6"
+>
+  <div
+    class="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <div>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+        Recent Tenders
+      </h3>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button
+        class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+      >
+        <svg
+          class="stroke-current fill-white dark:fill-gray-800"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M2.29004 5.90393H17.7067"
+            stroke=""
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M17.7075 14.0961H2.29085"
+            stroke=""
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M12.0826 3.33331C13.5024 3.33331 14.6534 4.48431 14.6534 5.90414C14.6534 7.32398 13.5024 8.47498 12.0826 8.47498C10.6627 8.47498 9.51172 7.32398 9.51172 5.90415C9.51172 4.48432 10.6627 3.33331 12.0826 3.33331Z"
+            fill=""
+            stroke=""
+            stroke-width="1.5"
+          />
+          <path
+            d="M7.91745 11.525C6.49762 11.525 5.34662 12.676 5.34662 14.0959C5.34661 15.5157 6.49762 16.6667 7.91745 16.6667C9.33728 16.6667 10.4883 15.5157 10.4883 14.0959C10.4883 12.676 9.33728 11.525 7.91745 11.525Z"
+            fill=""
+            stroke=""
+            stroke-width="1.5"
+          />
+        </svg>
+
+        Filter
+      </button>
+
+      <a
+        href="tender-management.html"
+        class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+      >
+        See all
+      </a>
+    </div>
+  </div>
+
+  <div class="w-full overflow-x-auto">
+    <table class="min-w-full">
+      <!-- table header start -->
+      <thead>
+        <tr class="border-gray-100 border-y dark:border-gray-800">
+          <th class="py-3">
+            <div class="flex items-center">
+              <p
+                class="font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+              >
+                Watch
+              </p>
+            </div>
+          </th>
+          <th class="py-3">
+            <div class="flex items-center">
+              <p
+                class="font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+              >
+                Buyer
+              </p>
+            </div>
+          </th>
+          <th class="py-3">
+            <div class="flex items-center">
+              <p
+                class="font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+              >
+                Offer / Asking
+              </p>
+            </div>
+          </th>
+          <th class="py-3">
+            <div class="flex items-center col-span-2">
+              <p
+                class="font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+              >
+                Status
+              </p>
+            </div>
+          </th>
+          <th class="py-3">
+            <div class="flex items-center">
+              <p
+                class="font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+              >
+                Action
+              </p>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <!-- table header end -->
+
+      <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+        <!-- Tender 1 - Counter Offer -->
+        <tr>
+          <td class="py-3">
+            <div class="flex items-center">
+              <div class="flex items-center gap-3">
+                <div class="h-[50px] w-[50px] overflow-hidden rounded-md bg-gray-100">
+                  <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop" alt="Watch" class="h-full w-full object-cover" />
+                </div>
+                <div>
+                  <p
+                    class="font-medium text-gray-800 text-theme-sm dark:text-white/90"
+                  >
+                    Rolex Submariner
+                  </p>
+                  <span class="text-gray-500 text-theme-xs dark:text-gray-400">
+                    126610LN - 2023
+                  </span>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                Watchfinder
+              </p>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <div>
+                <p class="text-amber-600 text-theme-sm font-medium">
+                  £11,200
+                </p>
+                <p class="text-gray-400 text-theme-xs line-through">
+                  £12,850
+                </p>
+              </div>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <p
+                class="rounded-full bg-amber-50 px-2 py-0.5 text-theme-xs font-medium text-amber-600 dark:bg-amber-500/15 dark:text-amber-400"
+              >
+                Counter Offer
+              </p>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center gap-2">
+              <button class="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-700">
+                Accept
+              </button>
+              <button class="rounded-lg bg-gray-200 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300">
+                Counter
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Tender 2 - Accepted -->
+        <tr>
+          <td class="py-3">
+            <div class="flex items-center">
+              <div class="flex items-center gap-3">
+                <div class="h-[50px] w-[50px] overflow-hidden rounded-md bg-gray-100">
+                  <img src="https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=100&h=100&fit=crop" alt="Watch" class="h-full w-full object-cover" />
+                </div>
+                <div>
+                  <p
+                    class="font-medium text-gray-800 text-theme-sm dark:text-white/90"
+                  >
+                    Rolex Daytona
+                  </p>
+                  <span class="text-gray-500 text-theme-xs dark:text-gray-400">
+                    116500LN - 2022
+                  </span>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                ChronoNext
+              </p>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <p class="text-green-600 text-theme-sm font-medium">
+                £28,500
+              </p>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <p
+                class="rounded-full bg-green-50 px-2 py-0.5 text-theme-xs font-medium text-green-600 dark:bg-green-500/15 dark:text-green-500"
+              >
+                Accepted
+              </p>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <span class="text-gray-400 text-theme-xs">Awaiting checkout</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Tender 3 - Counter Offer -->
+        <tr>
+          <td class="py-3">
+            <div class="flex items-center">
+              <div class="flex items-center gap-3">
+                <div class="h-[50px] w-[50px] overflow-hidden rounded-md bg-gray-100">
+                  <img src="https://images.unsplash.com/photo-1548169874-53e85f753f1e?w=100&h=100&fit=crop" alt="Watch" class="h-full w-full object-cover" />
+                </div>
+                <div>
+                  <p
+                    class="font-medium text-gray-800 text-theme-sm dark:text-white/90"
+                  >
+                    Omega Speedmaster
+                  </p>
+                  <span class="text-gray-500 text-theme-xs dark:text-gray-400">
+                    310.30.42.50 - 2023
+                  </span>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                Chrono24 DE
+              </p>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <div>
+                <p class="text-amber-600 text-theme-sm font-medium">
+                  £5,800
+                </p>
+                <p class="text-gray-400 text-theme-xs line-through">
+                  £6,450
+                </p>
+              </div>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <p
+                class="rounded-full bg-amber-50 px-2 py-0.5 text-theme-xs font-medium text-amber-600 dark:bg-amber-500/15 dark:text-amber-400"
+              >
+                Counter Offer
+              </p>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center gap-2">
+              <button class="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-700">
+                Accept
+              </button>
+              <button class="rounded-lg bg-gray-200 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300">
+                Counter
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Tender 4 - Accepted -->
+        <tr>
+          <td class="py-3">
+            <div class="flex items-center">
+              <div class="flex items-center gap-3">
+                <div class="h-[50px] w-[50px] overflow-hidden rounded-md bg-gray-100">
+                  <img src="https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=100&h=100&fit=crop" alt="Watch" class="h-full w-full object-cover" />
+                </div>
+                <div>
+                  <p
+                    class="font-medium text-gray-800 text-theme-sm dark:text-white/90"
+                  >
+                    Rolex Datejust 41
+                  </p>
+                  <span class="text-gray-500 text-theme-xs dark:text-gray-400">
+                    126334 - 2023
+                  </span>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                Watchfinder
+              </p>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <p class="text-green-600 text-theme-sm font-medium">
+                £9,250
+              </p>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <p
+                class="rounded-full bg-green-50 px-2 py-0.5 text-theme-xs font-medium text-green-600 dark:bg-green-500/15 dark:text-green-500"
+              >
+                Accepted
+              </p>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <span class="text-gray-400 text-theme-xs">Awaiting checkout</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Tender 5 - Counter Offer (below threshold) -->
+        <tr>
+          <td class="py-3">
+            <div class="flex items-center">
+              <div class="flex items-center gap-3">
+                <div class="h-[50px] w-[50px] overflow-hidden rounded-md bg-gray-100">
+                  <img src="https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=100&h=100&fit=crop" alt="Watch" class="h-full w-full object-cover" />
+                </div>
+                <div>
+                  <p
+                    class="font-medium text-gray-800 text-theme-sm dark:text-white/90"
+                  >
+                    AP Royal Oak
+                  </p>
+                  <span class="text-gray-500 text-theme-xs dark:text-gray-400">
+                    15500ST - 2022
+                  </span>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                Bob's Watches
+              </p>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <div>
+                <p class="text-red-600 text-theme-sm font-medium">
+                  £32,000
+                </p>
+                <p class="text-gray-400 text-theme-xs line-through">
+                  £38,500
+                </p>
+              </div>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center">
+              <p
+                class="rounded-full bg-red-50 px-2 py-0.5 text-theme-xs font-medium text-red-600 dark:bg-red-500/15 dark:text-red-400"
+              >
+                Below Margin
+              </p>
+            </div>
+          </td>
+          <td class="py-3">
+            <div class="flex items-center gap-2">
+              <button class="rounded-lg bg-gray-200 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300">
+                Counter
+              </button>
+              <button class="rounded-lg bg-red-100 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400">
+                Reject
+              </button>
+            </div>
+          </td>
+        </tr>
+        <!-- table body end -->
+      </tbody>
+    </table>
+  </div>
+</div>

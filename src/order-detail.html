@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Order Details | Private Label Dubai</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⌚%3C/text%3E%3C/svg%3E">
+  </head>
+  <body
+    x-data="{
+      page: 'orderDetail',
+      'loaded': true,
+      'darkMode': false,
+      'stickyMenu': false,
+      'sidebarToggle': false,
+      'scrollTop': false,
+      'showTrackingModal': false,
+      'showNotesModal': false,
+
+      // Sample order data
+      order: {
+        id: 'ORD-2025-001',
+        tenderRef: 'TND-001',
+        buyer: { name: 'Watchfinder', contact: 'James Richardson', email: 'james@watchfinder.co.uk', phone: '+44 20 7123 4567' },
+        orderDate: '2025-01-10',
+        status: 'processing',
+        trackingNumber: '',
+        carrier: '',
+        shippedDate: '',
+        deliveryDate: '',
+        notes: '',
+        paymentCurrency: 'GBP',
+        shippingMethod: 'private_label_ships',
+        watches: [
+          { id: 1, brand: 'Rolex', model: 'Submariner Date', reference: '126610LN', serial: 'P8K9L2M3', year: 2023, dial: 'Black', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop', price: 12850, costPrice: 10500 },
+          { id: 4, brand: 'Omega', model: 'Speedmaster', reference: '310.30.42.50', serial: 'A1B2C3D4', year: 2023, dial: 'Black', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1548169874-53e85f753f1e?w=100&h=100&fit=crop', price: 6450, costPrice: 5200 },
+          { id: 6, brand: 'Rolex', model: 'Datejust 36', reference: '126234', serial: 'X7Y8Z9A1', year: 2023, dial: 'Champagne', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop', price: 7850, costPrice: 6500 },
+          { id: 8, brand: 'Rolex', model: 'Air-King', reference: '126900', serial: 'Q2W3E4R5', year: 2022, dial: 'Black', condition: 'Excellent', box: true, papers: true, image: 'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=100&h=100&fit=crop', price: 6200, costPrice: 5300 },
+          { id: 12, brand: 'Rolex', model: 'Milgauss', reference: '116400GV', serial: 'T5Y6U7I8', year: 2020, dial: 'Green', condition: 'Excellent', box: false, papers: true, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop', price: 7800, costPrice: 6600 },
+          { id: 14, brand: 'Rolex', model: 'OP 41', reference: '124300', serial: 'O9P0A1S2', year: 2023, dial: 'Bright Blue', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=100&h=100&fit=crop', price: 5600, costPrice: 4800 },
+          { id: 17, brand: 'Omega', model: 'Speedmaster Racing', reference: '329.30.44.51', serial: 'D3F4G5H6', year: 2021, dial: 'Yellow', condition: 'Excellent', box: true, papers: true, image: 'https://images.unsplash.com/photo-1548169874-53e85f753f1e?w=100&h=100&fit=crop', price: 4200, costPrice: 3500 },
+          { id: 19, brand: 'Tudor', model: 'Ranger', reference: '79950', serial: 'J7K8L9M0', year: 2023, dial: 'Black', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=100&h=100&fit=crop', price: 2800, costPrice: 2300 },
+          { id: 22, brand: 'Rolex', model: 'Cellini Date', reference: '50519', serial: 'N1B2V3C4', year: 2020, dial: 'Black', condition: 'Very Good', box: true, papers: false, image: 'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=100&h=100&fit=crop', price: 12200, costPrice: 10500 },
+          { id: 3, brand: 'Rolex', model: 'Datejust 41', reference: '126334', serial: 'M5X6C7V8', year: 2023, dial: 'Blue', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=100&h=100&fit=crop', price: 9000, costPrice: 7800 },
+          { id: 10, brand: 'Tudor', model: 'Black Bay 58', reference: '79030N', serial: 'B9N0M1L2', year: 2022, dial: 'Blue', condition: 'Excellent', box: true, papers: true, image: 'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=100&h=100&fit=crop', price: 3200, costPrice: 2800 },
+          { id: 13, brand: 'Omega', model: 'Aqua Terra', reference: '220.10.41.21', serial: 'K3J4H5G6', year: 2023, dial: 'Blue', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1548169874-53e85f753f1e?w=100&h=100&fit=crop', price: 5400, costPrice: 4700 }
+        ]
+      },
+
+      get totalWatches() {
+        return this.order.watches.length;
+      },
+      get totalValue() {
+        return this.order.watches.reduce((sum, w) => sum + w.price, 0);
+      },
+      get totalProfit() {
+        return this.order.watches.reduce((sum, w) => sum + (w.price - w.costPrice), 0);
+      },
+      get avgMargin() {
+        const margin = (this.totalProfit / (this.totalValue - this.totalProfit)) * 100;
+        return margin.toFixed(1);
+      },
+
+      formatCurrency(amount) {
+        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(amount);
+      },
+
+      updateStatus(newStatus) {
+        this.order.status = newStatus;
+        // In real app, would save to backend
+      },
+
+      openTrackingModal() {
+        this.showTrackingModal = true;
+      },
+
+      saveTracking() {
+        // In real app, would save to backend
+        this.showTrackingModal = false;
+      },
+
+      openNotesModal() {
+        this.showNotesModal = true;
+      },
+
+      saveNotes() {
+        // In real app, would save to backend
+        this.showNotesModal = false;
+      },
+
+      exportInvoice() {
+        alert('Invoice PDF download would start here');
+      },
+
+      exportPO() {
+        alert('Purchase Order PDF download would start here');
+      }
+    }"
+    :class="darkMode ? 'dark' : 'light'"
+    @scroll.window="scrollTop = (window.pageYOffset > 50) ? true : false"
+  >
+    <include src="./partials/header.html"></include>
+
+    <div class="flex h-screen overflow-hidden">
+      <include src="./partials/sidebar.html"></include>
+
+      <div
+        class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
+      >
+        <main class="grow">
+          <div class="p-4 md:p-6 2xl:p-10">
+
+            <!-- Breadcrumb & Back Button -->
+            <div class="mb-6 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <a href="orders.html" class="flex items-center gap-2 text-sm text-gray-600 hover:text-amber-600 dark:text-gray-400 dark:hover:text-amber-500">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                  </svg>
+                  Back to Orders
+                </a>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <button @click="exportInvoice()" class="inline-flex items-center justify-center gap-2 rounded-md bg-white dark:bg-gray-800 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 shadow hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                  </svg>
+                  Invoice
+                </button>
+                <button @click="exportPO()" class="inline-flex items-center justify-center gap-2 rounded-md bg-white dark:bg-gray-800 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 shadow hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                  </svg>
+                  Purchase Order
+                </button>
+              </div>
+            </div>
+
+            <!-- Order Header -->
+            <div class="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-black">
+              <div class="flex items-start justify-between mb-4">
+                <div>
+                  <h1 class="text-3xl font-bold text-gray-900 dark:text-white" x-text="order.id"></h1>
+                  <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Originated from Tender: <a :href="'tender-detail.html?id=' + order.tenderRef" class="text-amber-600 hover:text-amber-700 font-medium" x-text="order.tenderRef"></a>
+                  </p>
+                </div>
+
+                <div class="flex items-center gap-3">
+                  <!-- Status Badge -->
+                  <span
+                    :class="{
+                      'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200': order.status === 'processing',
+                      'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200': order.status === 'shipped',
+                      'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': order.status === 'completed'
+                    }"
+                    class="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium capitalize"
+                  >
+                    <span class="h-1.5 w-1.5 rounded-full"
+                      :class="{
+                        'bg-yellow-600': order.status === 'processing',
+                        'bg-blue-600': order.status === 'shipped',
+                        'bg-green-600': order.status === 'completed'
+                      }"
+                    ></span>
+                    <span x-text="order.status"></span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Buyer Info -->
+                <div>
+                  <h3 class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase mb-2">Buyer Information</h3>
+                  <p class="text-sm font-semibold text-gray-900 dark:text-white" x-text="order.buyer.name"></p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400" x-text="order.buyer.contact"></p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400" x-text="order.buyer.email"></p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400" x-text="order.buyer.phone"></p>
+                </div>
+
+                <!-- Order Details -->
+                <div>
+                  <h3 class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase mb-2">Order Details</h3>
+                  <div class="space-y-1">
+                    <div class="flex justify-between text-sm">
+                      <span class="text-gray-600 dark:text-gray-400">Order Date:</span>
+                      <span class="text-gray-900 dark:text-white font-medium" x-text="order.orderDate"></span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                      <span class="text-gray-600 dark:text-gray-400">Watches:</span>
+                      <span class="text-gray-900 dark:text-white font-medium" x-text="totalWatches"></span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                      <span class="text-gray-600 dark:text-gray-400">Total Value:</span>
+                      <span class="text-gray-900 dark:text-white font-semibold" x-text="formatCurrency(totalValue)"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Shipping Info -->
+                <div>
+                  <h3 class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase mb-2">Shipping Details</h3>
+                  <div class="space-y-2">
+                    <div x-show="order.trackingNumber" class="text-sm">
+                      <span class="text-gray-600 dark:text-gray-400">Tracking:</span>
+                      <span class="text-gray-900 dark:text-white font-mono ml-2" x-text="order.trackingNumber"></span>
+                    </div>
+                    <div x-show="order.carrier" class="text-sm">
+                      <span class="text-gray-600 dark:text-gray-400">Carrier:</span>
+                      <span class="text-gray-900 dark:text-white ml-2" x-text="order.carrier"></span>
+                    </div>
+                    <div x-show="order.shippedDate" class="text-sm">
+                      <span class="text-gray-600 dark:text-gray-400">Shipped:</span>
+                      <span class="text-gray-900 dark:text-white ml-2" x-text="order.shippedDate"></span>
+                    </div>
+                    <button @click="openTrackingModal()" class="mt-2 text-sm text-amber-600 hover:text-amber-700 font-medium flex items-center gap-1">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                      </svg>
+                      Update Tracking
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-black">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Watches</p>
+                    <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white" x-text="totalWatches"></p>
+                  </div>
+                  <div class="rounded-full bg-amber-100 p-3 dark:bg-amber-900/20">
+                    <svg class="h-6 w-6 text-amber-600 dark:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-black">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Value</p>
+                    <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white" x-text="formatCurrency(totalValue)"></p>
+                  </div>
+                  <div class="rounded-full bg-green-100 p-3 dark:bg-green-900/20">
+                    <svg class="h-6 w-6 text-green-600 dark:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-black">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Profit</p>
+                    <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white" x-text="formatCurrency(totalProfit)"></p>
+                  </div>
+                  <div class="rounded-full bg-blue-100 p-3 dark:bg-blue-900/20">
+                    <svg class="h-6 w-6 text-blue-600 dark:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-black">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Avg Margin</p>
+                    <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white"><span x-text="avgMargin"></span>%</p>
+                  </div>
+                  <div class="rounded-full bg-purple-100 p-3 dark:bg-purple-900/20">
+                    <svg class="h-6 w-6 text-purple-600 dark:text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Order Management Actions -->
+            <div class="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-black">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Order Management</h2>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Update Status -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Order Status
+                  </label>
+                  <select
+                    x-model="order.status"
+                    @change="updateStatus($event.target.value)"
+                    class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                  >
+                    <option value="processing">Processing</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                </div>
+
+                <!-- Shipping Method -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Shipping Method
+                  </label>
+                  <select
+                    x-model="order.shippingMethod"
+                    class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                  >
+                    <option value="">Select method...</option>
+                    <option value="private_label_ships">Private Label Ships (Liability: Seller)</option>
+                    <option value="client_collects">Client Collects (Liability: Buyer)</option>
+                  </select>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Determines liability during transit
+                  </p>
+                </div>
+
+                <!-- Payment Currency -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Payment Currency
+                  </label>
+                  <div class="p-2 bg-gray-50 dark:bg-gray-900 rounded-md border border-gray-300 dark:border-gray-700">
+                    <span class="text-sm font-medium text-gray-900 dark:text-white" x-text="order.paymentCurrency === 'EUR' ? '€ Euro' : '£ British Pound'"></span>
+                  </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="md:col-span-2 flex items-end gap-3">
+                  <button @click="openTrackingModal()" class="inline-flex items-center justify-center gap-2 rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Add/Update Tracking
+                  </button>
+
+                  <button @click="openNotesModal()" class="inline-flex items-center justify-center gap-2 rounded-md bg-gray-200 dark:bg-gray-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                    Add Notes
+                  </button>
+
+                  <button @click="alert('Email sent to buyer')" class="inline-flex items-center justify-center gap-2 rounded-md bg-gray-200 dark:bg-gray-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    Email Buyer
+                  </button>
+                </div>
+              </div>
+
+              <!-- Notes Display -->
+              <div x-show="order.notes" class="mt-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-md">
+                <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase mb-1">Notes</p>
+                <p class="text-sm text-gray-700 dark:text-gray-300" x-text="order.notes"></p>
+              </div>
+            </div>
+
+            <!-- Watches Table -->
+            <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-black">
+              <div class="border-b border-gray-200 dark:border-gray-800 px-6 py-4">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Order Items</h2>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full">
+                  <thead>
+                    <tr class="border-b border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
+                      <th class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-400">Watch</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-400">Reference</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-400">Serial</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-400">Year</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-400">Condition</th>
+                      <th class="px-6 py-3 text-center text-xs font-medium uppercase text-gray-500 dark:text-gray-400">B&P</th>
+                      <th class="px-6 py-3 text-right text-xs font-medium uppercase text-gray-500 dark:text-gray-400">Price</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
+                    <template x-for="watch in order.watches" :key="watch.id">
+                      <tr class="hover:bg-gray-50 dark:hover:bg-gray-900">
+                        <td class="px-6 py-4">
+                          <div class="flex items-center gap-3">
+                            <img :src="watch.image" :alt="watch.brand + ' ' + watch.model" class="h-12 w-12 rounded-md object-cover">
+                            <div>
+                              <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="watch.brand"></p>
+                              <p class="text-sm text-gray-500 dark:text-gray-400" x-text="watch.model"></p>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="px-6 py-4">
+                          <span class="font-mono text-sm text-gray-700 dark:text-gray-300" x-text="watch.reference"></span>
+                        </td>
+                        <td class="px-6 py-4">
+                          <span class="font-mono text-sm text-gray-700 dark:text-gray-300" x-text="watch.serial"></span>
+                        </td>
+                        <td class="px-6 py-4">
+                          <span class="text-sm text-gray-700 dark:text-gray-300" x-text="watch.year"></span>
+                        </td>
+                        <td class="px-6 py-4">
+                          <span class="text-sm text-gray-700 dark:text-gray-300" x-text="watch.condition"></span>
+                        </td>
+                        <td class="px-6 py-4">
+                          <div class="flex items-center justify-center gap-2">
+                            <span :class="watch.box ? 'text-green-600' : 'text-gray-300'" class="text-xs font-medium" :title="watch.box ? 'Box included' : 'No box'">B</span>
+                            <span :class="watch.papers ? 'text-green-600' : 'text-gray-300'" class="text-xs font-medium" :title="watch.papers ? 'Papers included' : 'No papers'">P</span>
+                          </div>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                          <span class="text-sm font-semibold text-gray-900 dark:text-white" x-text="formatCurrency(watch.price)"></span>
+                        </td>
+                      </tr>
+                    </template>
+                  </tbody>
+                  <tfoot class="border-t-2 border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                    <tr>
+                      <td colspan="6" class="px-6 py-4 text-right text-sm font-semibold text-gray-900 dark:text-white">
+                        Total (<span x-text="totalWatches"></span> watches):
+                      </td>
+                      <td class="px-6 py-4 text-right text-lg font-bold text-gray-900 dark:text-white" x-text="formatCurrency(totalValue)"></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </main>
+      </div>
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+
+    <!-- Tracking Modal -->
+    <div
+      x-show="showTrackingModal"
+      x-transition
+      style="display: none;"
+      class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 px-4"
+    >
+      <div
+        @click.away="showTrackingModal = false"
+        class="w-full max-w-md rounded-lg bg-white p-6 shadow-xl dark:bg-gray-800"
+      >
+        <div class="mb-4 flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Update Tracking Information</h3>
+          <button @click="showTrackingModal = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Carrier
+            </label>
+            <select x-model="order.carrier" class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+              <option value="">Select carrier...</option>
+              <option value="DHL">DHL Express</option>
+              <option value="FedEx">FedEx International</option>
+              <option value="UPS">UPS Worldwide</option>
+              <option value="Brinks">Brinks Security</option>
+              <option value="Malca-Amit">Malca-Amit</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Tracking Number
+            </label>
+            <input
+              x-model="order.trackingNumber"
+              type="text"
+              placeholder="Enter tracking number..."
+              class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Shipped Date
+            </label>
+            <input
+              x-model="order.shippedDate"
+              type="date"
+              class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Expected Delivery
+            </label>
+            <input
+              x-model="order.deliveryDate"
+              type="date"
+              class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end gap-3">
+          <button @click="showTrackingModal = false" class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+            Cancel
+          </button>
+          <button @click="saveTracking()" class="rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700">
+            Save Tracking
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notes Modal -->
+    <div
+      x-show="showNotesModal"
+      x-transition
+      style="display: none;"
+      class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 px-4"
+    >
+      <div
+        @click.away="showNotesModal = false"
+        class="w-full max-w-md rounded-lg bg-white p-6 shadow-xl dark:bg-gray-800"
+      >
+        <div class="mb-4 flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Order Notes</h3>
+          <button @click="showNotesModal = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Notes (internal only)
+          </label>
+          <textarea
+            x-model="order.notes"
+            rows="6"
+            placeholder="Add any internal notes about this order..."
+            class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          ></textarea>
+        </div>
+
+        <div class="mt-6 flex justify-end gap-3">
+          <button @click="showNotesModal = false" class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+            Cancel
+          </button>
+          <button @click="saveNotes()" class="rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700">
+            Save Notes
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

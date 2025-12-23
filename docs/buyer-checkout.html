@@ -7,7 +7,8 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Checkout | Purbeck Ice Cream B2B Portal</title>
+    <title>Checkout | Private Label Dubai</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⌚</text></svg>">
   <link rel="icon" href="favicon-purbeck.png"><link href="style.css" rel="stylesheet"></head>
   <body
     x-data="{
@@ -16,32 +17,52 @@
       'darkMode': false,
       'cartCount': 3,
       'user': {
-        name: 'Sarah Mitchell',
-        email: 'sarah.mitchell@thecornishcafe.co.uk',
-        company: 'The Cornish Cafe',
+        name: 'James Richardson',
+        email: 'james@watchfinder.co.uk',
+        company: 'Watchfinder',
         role: 'Buyer'
       },
       'step': 1,
+      'selectedCurrency': 'GBP',
+      'shippingMethod': 'private_label_ships',
       'cartItems': [
-        { id: 1, name: 'Vanilla Bean', sku: 'VB-5L-NAP', price: 24.50, qty: 2, unit: '5L Napoli' },
-        { id: 2, name: 'Serious Chocolate', sku: 'CHO-5L-NAP', price: 26.00, qty: 1, unit: '5L Napoli' },
-        { id: 6, name: 'Cherry, Red Grape & Hibiscus Sorbet', sku: 'CRH-5L-NAP', price: 24.00, qty: 3, unit: '5L Napoli' }
+        { id: 1, reference: '126610LN', serial: '8Y3L5N2Q', brand: 'Rolex', model: 'Submariner Date', year: 2023, dial: 'Black', condition: 'Unworn', priceGBP: 12850, priceEUR: 15050, status: 'accepted' },
+        { id: 2, reference: '116500LN', serial: '3K7P2M9X', brand: 'Rolex', model: 'Daytona', year: 2022, dial: 'White', condition: 'Excellent', priceGBP: 28500, priceEUR: 33350, status: 'accepted' },
+        { id: 3, reference: '126334', serial: '5L2N8Q4R', brand: 'Rolex', model: 'Datejust 41', year: 2023, dial: 'Blue', condition: 'Good', priceGBP: 9250, priceEUR: 10830, status: 'accepted' }
       ],
-      'dispatchSchedule': {
-        nextDispatch: 'Wednesday, 22nd January 2025',
-        frequency: '4th Wednesday of each month',
-        cutoffDate: 'Monday, 20th January 2025'
+      'deliveryAddress': 'Watchfinder & Co., 29-31 Sackville Street, London, W1S 3DY',
+      'editingAddress': false,
+      'tempAddress': 'Watchfinder & Co., 29-31 Sackville Street, London, W1S 3DY',
+      startEditAddress() {
+        this.tempAddress = this.deliveryAddress;
+        this.editingAddress = true;
       },
-      'deliveryAddress': 'The Cornish Cafe, Cornwall',
+      saveAddress() {
+        this.deliveryAddress = this.tempAddress;
+        this.editingAddress = false;
+      },
+      cancelEdit() {
+        this.editingAddress = false;
+      },
       get subtotal() {
-        return this.cartItems.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        return this.cartItems.reduce((sum, item) => {
+          const price = this.selectedCurrency === 'GBP' ? item.priceGBP : item.priceEUR;
+          return sum + price;
+        }, 0);
+      },
+      get watchCount() {
+        return this.cartItems.length;
       },
       placeOrder() {
-        alert('Order placed successfully! Order ID: ORD-2025-0345\\n\\nYour order has been confirmed and will be dispatched on ' + this.dispatchSchedule.nextDispatch + '.');
+        const orderNum = 'ORD-2025-' + Math.floor(Math.random() * 1000).toString().padStart(4, '0');
+        const currencySymbol = this.selectedCurrency === 'GBP' ? '£' : '€';
+        alert('Order placed successfully! Order ID: ' + orderNum + '\\n\\n' + this.watchCount + ' watches confirmed in ' + this.selectedCurrency + '. Dan will dispatch within 2-3 business days.');
         window.location.href = 'buyer-orders.html';
       },
-      formatPrice(amount) {
-        return '£' + amount.toFixed(2);
+      formatPrice(amount, currency) {
+        const curr = currency || this.selectedCurrency;
+        const symbol = curr === 'EUR' ? '€' : '£';
+        return symbol + amount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       }
     }"
     x-init="
@@ -74,12 +95,9 @@
       <!-- Left: Logo & Nav -->
       <div class="flex items-center gap-8">
         <!-- Logo -->
-        <a href="buyer-dashboard.html" class="flex items-center gap-3">
-          <img
-            src="src/images/purbeck_logo.png"
-            alt="Purbeck Ice Cream"
-            class="h-auto w-[120px]"
-          />
+        <a href="buyer-dashboard.html" class="flex items-center gap-2">
+          <span class="text-lg font-bold text-gray-900 dark:text-white">Private Label</span>
+          <span class="text-lg font-semibold text-amber-600">Dubai</span>
         </a>
 
         <!-- Main Navigation -->
@@ -96,14 +114,14 @@
             :class="page === 'buyerProducts' ? 'text-amber-600 dark:text-amber-400' : 'text-gray-700 hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400'"
             class="text-sm font-medium transition-colors"
           >
-            Products
+            Browse Stock
           </a>
           <a
-            href="buyer-bulk-upload.html"
-            :class="page === 'buyerBulkUpload' ? 'text-amber-600 dark:text-amber-400' : 'text-gray-700 hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400'"
+            href="buyer-cart.html"
+            :class="page === 'buyerCart' ? 'text-amber-600 dark:text-amber-400' : 'text-gray-700 hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400'"
             class="text-sm font-medium transition-colors"
           >
-            Bulk Upload
+            My Selections
           </a>
           <a
             href="buyer-orders.html"
@@ -122,7 +140,7 @@
           <div class="relative">
             <input
               type="search"
-              placeholder="Search products..."
+              placeholder="Search watches..."
               class="h-10 w-64 rounded-lg border border-gray-300 pr-4 pl-10 text-sm focus:border-transparent focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
             />
             <svg
@@ -352,14 +370,67 @@
                 </h2>
 
                 <div class="mb-6 rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-                  <div class="flex items-start gap-3">
-                    <svg class="h-5 w-5 mt-0.5 text-amber-600 dark:text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    </svg>
-                    <div>
-                      <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="deliveryAddress"></p>
-                      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Primary delivery location</p>
+                  <template x-if="!editingAddress">
+                    <div class="flex items-start justify-between gap-3">
+                      <div class="flex items-start gap-3">
+                        <svg class="h-5 w-5 mt-0.5 text-amber-600 dark:text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        </svg>
+                        <div>
+                          <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="deliveryAddress"></p>
+                          <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Primary delivery location</p>
+                        </div>
+                      </div>
+                      <button
+                        @click="startEditAddress()"
+                        class="px-3 py-1 text-xs font-medium text-amber-600 hover:bg-amber-50 rounded dark:text-amber-400 dark:hover:bg-amber-900/20"
+                      >
+                        Edit
+                      </button>
                     </div>
+                  </template>
+                  <template x-if="editingAddress">
+                    <div class="space-y-3">
+                      <textarea
+                        x-model="tempAddress"
+                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        rows="3"
+                      ></textarea>
+                      <div class="flex gap-2">
+                        <button
+                          @click="saveAddress()"
+                          class="flex-1 px-3 py-2 text-xs font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700"
+                        >
+                          Save
+                        </button>
+                        <button
+                          @click="cancelEdit()"
+                          class="flex-1 px-3 py-2 text-xs font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+
+                <div class="mb-6">
+                  <h3 class="mb-3 font-semibold text-gray-900 dark:text-white">Shipping Method</h3>
+                  <div class="space-y-3">
+                    <label class="flex items-start gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900/50" :class="shippingMethod === 'private_label_ships' ? 'border-amber-600 bg-amber-50 dark:bg-amber-900/20' : ''">
+                      <input type="radio" x-model="shippingMethod" value="private_label_ships" class="w-4 h-4 mt-0.5 text-amber-600" />
+                      <div>
+                        <p class="font-medium text-gray-900 dark:text-white">Private Label Ships</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">We handle shipping. Seller liability during transit.</p>
+                      </div>
+                    </label>
+                    <label class="flex items-start gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900/50" :class="shippingMethod === 'client_collects' ? 'border-amber-600 bg-amber-50 dark:bg-amber-900/20' : ''">
+                      <input type="radio" x-model="shippingMethod" value="client_collects" class="w-4 h-4 mt-0.5 text-amber-600" />
+                      <div>
+                        <p class="font-medium text-gray-900 dark:text-white">Client Collects</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">You arrange pickup. Buyer liability once released.</p>
+                      </div>
+                    </label>
                   </div>
                 </div>
 
@@ -368,10 +439,10 @@
                   <template x-for="item in cartItems" :key="item.id">
                     <div class="flex items-center justify-between text-sm rounded-lg bg-gray-50 dark:bg-gray-900 p-3">
                       <div>
-                        <p class="text-gray-900 dark:text-white font-medium" x-text="item.name"></p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400" x-text="'Qty: ' + item.qty + ' • ' + item.unit"></p>
+                        <p class="text-gray-900 dark:text-white font-medium" x-text="item.brand + ' ' + item.model"></p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400" x-text="'Ref: ' + item.reference + ' • ' + item.year + ' • ' + item.dial + ' dial'"></p>
                       </div>
-                      <p class="text-gray-900 dark:text-white font-semibold" x-text="formatPrice(item.price * item.qty)"></p>
+                      <p class="text-gray-900 dark:text-white font-semibold" x-text="formatPrice(selectedCurrency === 'GBP' ? item.priceGBP : item.priceEUR, selectedCurrency)"></p>
                     </div>
                   </template>
                 </div>
@@ -421,16 +492,18 @@
                         <div class="flex-1">
                           <p
                             class="text-sm font-medium text-gray-900 dark:text-white"
-                            x-text="item.name"
+                            x-text="item.brand + ' ' + item.model"
                           ></p>
                           <p class="text-xs text-gray-500 dark:text-gray-400">
-                            Qty: <span x-text="item.qty"></span> •
-                            <span x-text="item.unit"></span>
+                            Ref: <span x-text="item.reference"></span> •
+                            <span x-text="item.year"></span> •
+                            <span x-text="item.dial + ' dial'"></span> •
+                            <span x-text="item.condition"></span>
                           </p>
                         </div>
                         <p
                           class="text-sm font-semibold text-gray-900 dark:text-white"
-                          x-text="formatPrice(item.price * item.qty)"
+                          x-text="formatPrice(selectedCurrency === 'GBP' ? item.priceGBP : item.priceEUR, selectedCurrency)"
                         ></p>
                       </div>
                     </template>
@@ -447,6 +520,15 @@
                       <span
                         class="font-medium text-gray-900 dark:text-white text-right text-xs"
                         x-text="deliveryAddress"
+                      ></span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-gray-600 dark:text-gray-400"
+                        >Shipping Method:</span
+                      >
+                      <span
+                        class="font-medium text-gray-900 dark:text-white text-right text-xs"
+                        x-text="shippingMethod === 'private_label_ships' ? 'Private Label Ships' : 'Client Collects'"
                       ></span>
                     </div>
                   </div>
@@ -506,6 +588,13 @@
                   Order Summary
                 </h2>
 
+                <!-- Currency Indicator -->
+                <div class="mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                  <p class="text-xs font-semibold text-amber-700 dark:text-amber-400">
+                    All prices shown in <span x-text="selectedCurrency"></span>
+                  </p>
+                </div>
+
                 <div
                   class="mb-4 border-b border-gray-200 pb-4 dark:border-gray-700"
                 >
@@ -542,7 +631,7 @@
 
                 <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
                   <p class="text-xs text-gray-600 dark:text-gray-400">
-                    By placing this order, you agree to Purbeck Ice Cream' terms
+                    By placing this order, you agree to Private Label Dubai's terms
                     and conditions
                   </p>
                 </div>
@@ -561,7 +650,7 @@
             class="flex flex-col items-center justify-between gap-4 sm:flex-row"
           >
             <p class="text-sm text-gray-500 dark:text-gray-400">
-              © 2025 Purbeck Ice Cream. All rights reserved.
+              © 2025 Private Label Dubai. All rights reserved.
             </p>
             <div class="flex items-center gap-6 text-sm">
               <a

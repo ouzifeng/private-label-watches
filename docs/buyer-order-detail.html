@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Order Details | Private Label Dubai</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⌚</text></svg>">
+  <link rel="icon" href="favicon-purbeck.png"><link href="style.css" rel="stylesheet"></head>
+  <body
+    x-data="{
+      page: 'buyerOrderDetail',
+      'loaded': true,
+      'darkMode': false,
+      'cartCount': 3,
+      'user': {
+        name: 'James Richardson',
+        email: 'james@watchfinder.co.uk',
+        company: 'Watchfinder',
+        role: 'Buyer'
+      },
+      order: {
+        id: 'ORD-2025-001',
+        tenderRef: 'TND-2025-001',
+        orderDate: '2025-01-10',
+        status: 'delivered',
+        dispatchDate: '2025-01-11',
+        deliveryDate: '2025-01-13',
+        trackingNumber: 'DHL-892374928374',
+        carrier: 'DHL Express',
+        total: 156400.00,
+        watches: [
+          { id: 1, brand: 'Rolex', model: 'Submariner Date', reference: '126610LN', serial: 'P8K9L2M3', year: 2023, dial: 'Black', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop', price: 12850 },
+          { id: 4, brand: 'Omega', model: 'Speedmaster', reference: '310.30.42.50', serial: 'A1B2C3D4', year: 2023, dial: 'Black', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1548169874-53e85f753f1e?w=100&h=100&fit=crop', price: 6450 },
+          { id: 6, brand: 'Rolex', model: 'Datejust 36', reference: '126234', serial: 'X7Y8Z9A1', year: 2023, dial: 'Champagne', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop', price: 7850 },
+          { id: 8, brand: 'Rolex', model: 'Air-King', reference: '126900', serial: 'Q2W3E4R5', year: 2022, dial: 'Black', condition: 'Excellent', box: true, papers: true, image: 'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=100&h=100&fit=crop', price: 6200 },
+          { id: 12, brand: 'Rolex', model: 'Milgauss', reference: '116400GV', serial: 'T5Y6U7I8', year: 2020, dial: 'Green', condition: 'Excellent', box: false, papers: true, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop', price: 7800 },
+          { id: 14, brand: 'Rolex', model: 'OP 41', reference: '124300', serial: 'O9P0A1S2', year: 2023, dial: 'Bright Blue', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=100&h=100&fit=crop', price: 5600 },
+          { id: 17, brand: 'Omega', model: 'Speedmaster Racing', reference: '329.30.44.51', serial: 'D3F4G5H6', year: 2021, dial: 'Yellow', condition: 'Excellent', box: true, papers: true, image: 'https://images.unsplash.com/photo-1548169874-53e85f753f1e?w=100&h=100&fit=crop', price: 4200 },
+          { id: 19, brand: 'Tudor', model: 'Ranger', reference: '79950', serial: 'J7K8L9M0', year: 2023, dial: 'Black', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=100&h=100&fit=crop', price: 2800 },
+          { id: 22, brand: 'Rolex', model: 'Cellini Date', reference: '50519', serial: 'N1B2V3C4', year: 2020, dial: 'Black', condition: 'Very Good', box: true, papers: false, image: 'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=100&h=100&fit=crop', price: 12200 },
+          { id: 3, brand: 'Rolex', model: 'Datejust 41', reference: '126334', serial: 'M5X6C7V8', year: 2023, dial: 'Blue', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=100&h=100&fit=crop', price: 9000 },
+          { id: 10, brand: 'Tudor', model: 'Black Bay 58', reference: '79030N', serial: 'B9N0M1L2', year: 2022, dial: 'Blue', condition: 'Excellent', box: true, papers: true, image: 'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=100&h=100&fit=crop', price: 3200 },
+          { id: 13, brand: 'Omega', model: 'Aqua Terra', reference: '220.10.41.21', serial: 'K3J4H5G6', year: 2023, dial: 'Blue', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1548169874-53e85f753f1e?w=100&h=100&fit=crop', price: 5400 }
+        ]
+      },
+      getStatusConfig(status) {
+        const configs = {
+          'processing': { label: 'Processing', color: 'amber', bgClass: 'bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300' },
+          'shipped': { label: 'Shipped', color: 'blue', bgClass: 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300' },
+          'delivered': { label: 'Delivered', color: 'green', bgClass: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300' }
+        };
+        return configs[status] || configs.processing;
+      },
+      formatCurrency(amount) {
+        return '£' + amount.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      },
+      formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      },
+      downloadInvoice() {
+        alert('Invoice PDF download would start here');
+      },
+      trackShipment() {
+        if (this.order.trackingNumber) {
+          window.open('https://www.dhl.com/gb-en/home/tracking.html?tracking-id=' + this.order.trackingNumber, '_blank');
+        }
+      }
+    }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <div
+  x-show="loaded"
+  x-init="window.addEventListener('DOMContentLoaded', () => {setTimeout(() => loaded = false, 500)})"
+  class="fixed left-0 top-0 z-999999 flex h-screen w-screen items-center justify-center bg-white dark:bg-black"
+>
+  <div
+    class="h-16 w-16 animate-spin rounded-full border-4 border-solid border-brand-500 border-t-transparent"
+  ></div>
+</div>
+
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Container ===== -->
+    <div class="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+      <!-- ===== Top Navigation Bar ===== -->
+      <!-- ===== B2B Buyer Top Navigation Bar ===== -->
+<header
+  class="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800"
+>
+  <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <!-- Left: Logo & Nav -->
+      <div class="flex items-center gap-8">
+        <!-- Logo -->
+        <a href="buyer-dashboard.html" class="flex items-center gap-2">
+          <span class="text-lg font-bold text-gray-900 dark:text-white">Private Label</span>
+          <span class="text-lg font-semibold text-amber-600">Dubai</span>
+        </a>
+
+        <!-- Main Navigation -->
+        <nav class="hidden items-center gap-6 md:flex">
+          <a
+            href="buyer-dashboard.html"
+            :class="page === 'buyerDashboard' ? 'text-amber-600 dark:text-amber-400' : 'text-gray-700 hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400'"
+            class="text-sm font-medium transition-colors"
+          >
+            Home
+          </a>
+          <a
+            href="buyer-products.html"
+            :class="page === 'buyerProducts' ? 'text-amber-600 dark:text-amber-400' : 'text-gray-700 hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400'"
+            class="text-sm font-medium transition-colors"
+          >
+            Browse Stock
+          </a>
+          <a
+            href="buyer-cart.html"
+            :class="page === 'buyerCart' ? 'text-amber-600 dark:text-amber-400' : 'text-gray-700 hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400'"
+            class="text-sm font-medium transition-colors"
+          >
+            My Selections
+          </a>
+          <a
+            href="buyer-orders.html"
+            :class="page === 'buyerOrders' ? 'text-amber-600 dark:text-amber-400' : 'text-gray-700 hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400'"
+            class="text-sm font-medium transition-colors"
+          >
+            My Orders
+          </a>
+        </nav>
+      </div>
+
+      <!-- Right: Search, Cart, User -->
+      <div class="flex items-center gap-4">
+        <!-- Search -->
+        <div class="hidden lg:block">
+          <div class="relative">
+            <input
+              type="search"
+              placeholder="Search watches..."
+              class="h-10 w-64 rounded-lg border border-gray-300 pr-4 pl-10 text-sm focus:border-transparent focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+            />
+            <svg
+              class="absolute top-2.5 left-3 h-5 w-5 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Cart -->
+        <a
+          href="buyer-cart.html"
+          class="relative p-2 text-gray-700 transition-colors hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400"
+        >
+          <svg
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+            />
+          </svg>
+          <span
+            x-show="cartCount > 0"
+            class="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-amber-600 text-xs font-bold text-white"
+            x-text="cartCount"
+          ></span>
+        </a>
+
+        <!-- User Profile Dropdown -->
+        <div
+          x-data="{ open: false }"
+          @click.away="open = false"
+          class="relative"
+        >
+          <button
+            @click="open = !open"
+            class="flex items-center gap-2 p-2 text-gray-700 transition-colors hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400"
+          >
+            <div
+              class="flex h-8 w-8 items-center justify-center rounded-full bg-amber-600 text-sm font-semibold text-white"
+            >
+              <span
+                x-text="user.name.split(' ').map(n => n[0]).join('')"
+              ></span>
+            </div>
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div
+            x-show="open"
+            x-transition
+            class="absolute right-0 mt-2 w-64 rounded-lg border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-800"
+          >
+            <div class="border-b border-gray-200 p-4 dark:border-gray-700">
+              <p
+                class="text-sm font-semibold text-gray-900 dark:text-white"
+                x-text="user.name"
+              ></p>
+              <p
+                class="text-xs text-gray-500 dark:text-gray-400"
+                x-text="user.email"
+              ></p>
+              <p class="mt-1 text-xs text-gray-600 dark:text-gray-400">
+                <span x-text="user.company"></span> •
+                <span x-text="user.role"></span>
+              </p>
+            </div>
+            <div class="p-2">
+              <a
+                href="#"
+                class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+              >
+                <svg
+                  class="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+                My Account
+              </a>
+              <a
+                href="#"
+                class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+              >
+                <svg
+                  class="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+                Settings
+              </a>
+            </div>
+            <div class="border-t border-gray-200 p-2 dark:border-gray-700">
+              <a
+                href="b2b-login.html"
+                class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+              >
+                <svg
+                  class="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
+                </svg>
+                Sign Out
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+      <!-- ===== Main Content ===== -->
+      <main class="flex-1 py-8">
+        <div class="px-4 mx-auto max-w-screen-2xl sm:px-6 lg:px-8">
+
+          <!-- Breadcrumb & Actions -->
+          <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <a href="buyer-orders.html" class="flex items-center gap-2 text-sm text-gray-600 hover:text-amber-600 dark:text-gray-400 dark:hover:text-amber-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Back to Orders
+            </a>
+
+            <div class="flex items-center gap-3">
+              <button @click="downloadInvoice()" class="inline-flex items-center justify-center gap-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Download Invoice
+              </button>
+              <button x-show="order.trackingNumber" @click="trackShipment()" class="inline-flex items-center justify-center gap-2 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                Track Shipment
+              </button>
+            </div>
+          </div>
+
+          <!-- Order Header -->
+          <div class="mb-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+            <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+              <div class="flex-1">
+                <div class="flex items-start justify-between mb-4">
+                  <div>
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white" x-text="order.id"></h1>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                      Ordered on <span x-text="formatDate(order.orderDate)"></span>
+                      <span class="mx-2">•</span>
+                      From tender <a :href="'buyer-tender-detail.html?id=' + order.tenderRef" class="text-amber-600 hover:text-amber-700 dark:text-amber-400" x-text="order.tenderRef"></a>
+                    </p>
+                  </div>
+                  <span
+                    class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold rounded-full"
+                    :class="getStatusConfig(order.status).bgClass"
+                    x-text="getStatusConfig(order.status).label"
+                  ></span>
+                </div>
+
+                <!-- Order Stats -->
+                <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                  <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-900/50">
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Total Watches</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="order.watches.length"></p>
+                  </div>
+                  <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-900/50">
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Order Total</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="formatCurrency(order.total)"></p>
+                  </div>
+                  <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-900/50" x-show="order.dispatchDate">
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Dispatched</p>
+                    <p class="text-base font-semibold text-gray-900 dark:text-white" x-text="formatDate(order.dispatchDate)"></p>
+                  </div>
+                  <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-900/50" x-show="order.deliveryDate">
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Delivered</p>
+                    <p class="text-base font-semibold text-green-600 dark:text-green-400" x-text="formatDate(order.deliveryDate)"></p>
+                  </div>
+                </div>
+
+                <!-- Tracking Info -->
+                <div x-show="order.trackingNumber" class="mt-4 p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+                  <div class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
+                      <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/>
+                    </svg>
+                    <div class="flex-1">
+                      <p class="text-sm font-medium text-blue-800 dark:text-blue-300 mb-1">Shipment Tracking</p>
+                      <div class="flex flex-col gap-1">
+                        <p class="text-sm text-blue-700 dark:text-blue-400">
+                          Carrier: <span class="font-semibold" x-text="order.carrier"></span>
+                        </p>
+                        <p class="text-sm text-blue-700 dark:text-blue-400">
+                          Tracking: <span class="font-mono font-semibold" x-text="order.trackingNumber"></span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Watches Table -->
+          <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 overflow-hidden">
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+              <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+                Watches in this Order (<span x-text="order.watches.length"></span>)
+              </h2>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Watch</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Reference</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Serial</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Year</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Dial</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Condition</th>
+                    <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Price</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                  <template x-for="(watch, index) in order.watches" :key="watch.id">
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors">
+                      <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                          <img :src="watch.image" :alt="watch.model" class="w-12 h-12 rounded-lg object-cover bg-gray-100 flex-shrink-0" />
+                          <div>
+                            <p class="font-semibold text-gray-900 dark:text-white" x-text="watch.brand"></p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400" x-text="watch.model"></p>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white" x-text="watch.reference"></td>
+                      <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400" x-text="watch.serial"></td>
+                      <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400" x-text="watch.year"></td>
+                      <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400" x-text="watch.dial"></td>
+                      <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400" x-text="watch.condition"></td>
+                      <td class="px-6 py-4 text-right">
+                        <span class="text-base font-bold text-gray-900 dark:text-white" x-text="formatCurrency(watch.price)"></span>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+                <tfoot class="bg-gray-50 dark:bg-gray-900/50 border-t-2 border-gray-300 dark:border-gray-600">
+                  <tr>
+                    <td colspan="6" class="px-6 py-4 text-right text-lg font-semibold text-gray-900 dark:text-white">Order Total</td>
+                    <td class="px-6 py-4 text-right">
+                      <span class="text-2xl font-bold text-gray-900 dark:text-white" x-text="formatCurrency(order.total)"></span>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- ===== Footer ===== -->
+      <footer class="py-6 mt-8 bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+        <div class="px-4 mx-auto max-w-screen-2xl sm:px-6 lg:px-8">
+          <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              © 2025 Private Label Dubai. All rights reserved.
+            </p>
+            <div class="flex items-center gap-6 text-sm">
+              <a href="#" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">Help & Support</a>
+              <a href="#" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">Terms & Conditions</a>
+              <a href="#" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">Privacy Policy</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- ===== Page Container End ===== -->
+  <script defer src="bundle.js"></script></body>
+</html>

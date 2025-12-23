@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Dashboard | Private Label Dubai</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⌚%3C/text%3E%3C/svg%3E">
+  </head>
+  <body
+    x-data="{
+      page: 'ecommerce',
+      'loaded': true,
+      'darkMode': false,
+      'stickyMenu': false,
+      'sidebarToggle': false,
+      'scrollTop': false,
+
+      // Dashboard Metrics
+      stats: {
+        totalStockValue: 1247850.00,
+        activeListings: 127,
+        pendingOffers: 34,
+        revenueThisWeek: 285400.00
+      },
+
+      // Sales by Brand
+      salesByBrand: [
+        { brand: 'Rolex', sales: 145300, percent: 51 },
+        { brand: 'Patek Philippe', sales: 68400, percent: 24 },
+        { brand: 'Audemars Piguet', sales: 42500, percent: 15 },
+        { brand: 'Omega', sales: 18200, percent: 6 },
+        { brand: 'Others', sales: 11000, percent: 4 }
+      ],
+
+      // Recent Tenders
+      recentTenders: [
+        { id: 'TND-001', buyer: 'Watchfinder', contact: 'James Richardson', submitted: '2 hours ago', watches: 23, value: 285400, offers: 18, status: 'pending' },
+        { id: 'TND-002', buyer: 'ChronoNext', contact: 'Michael Weber', submitted: '1 hour ago', watches: 47, value: 512300, offers: 31, status: 'partially_accepted' },
+        { id: 'TND-003', buyer: 'Chrono24 DE', contact: 'Hans Mueller', submitted: '30 mins ago', watches: 12, value: 156700, offers: 8, status: 'pending' }
+      ],
+
+      formatPrice(amount) {
+        return '£' + amount.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      },
+
+      acceptTender(tenderId) {
+        alert('Tender ' + tenderId + ' accepted!');
+      },
+
+      rejectTender(tenderId) {
+        alert('Tender ' + tenderId + ' rejected!');
+      }
+    }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+            <!-- Page Header -->
+            <div class="mb-6">
+              <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Overview of your watch wholesale business</p>
+            </div>
+
+            <!-- Metrics Grid -->
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 md:gap-6 mb-6">
+              <!-- Total Stock Value -->
+              <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                <div class="flex items-center gap-4">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/20">
+                    <svg class="h-6 w-6 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Stock Value</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="formatPrice(stats.totalStockValue)"></p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Active Listings -->
+              <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                <div class="flex items-center gap-4">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/20">
+                    <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Active Listings</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="stats.activeListings"></p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pending Offers -->
+              <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                <div class="flex items-center gap-4">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/20">
+                    <svg class="h-6 w-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Pending Offers</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="stats.pendingOffers"></p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Revenue This Week -->
+              <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                <div class="flex items-center gap-4">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/20">
+                    <svg class="h-6 w-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Revenue This Week</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="formatPrice(stats.revenueThisWeek)"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Charts & Tables Grid -->
+            <div class="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-12">
+              <!-- Sales by Brand Chart -->
+              <div class="lg:col-span-5">
+                <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                  <h3 class="mb-6 text-lg font-bold text-gray-900 dark:text-white">Sales by Brand</h3>
+                  <div class="space-y-4">
+                    <template x-for="brand in salesByBrand" :key="brand.brand">
+                      <div>
+                        <div class="flex items-center justify-between mb-2">
+                          <span class="text-sm font-medium text-gray-700 dark:text-gray-300" x-text="brand.brand"></span>
+                          <span class="text-sm font-semibold text-gray-900 dark:text-white" x-text="formatPrice(brand.sales)"></span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                          <div class="bg-amber-600 h-2.5 rounded-full" :style="'width: ' + brand.percent + '%'"></div>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Recent Tenders Table -->
+              <div class="lg:col-span-7">
+                <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                  <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">Recent Tenders</h3>
+                    <a href="tender-management.html" class="text-sm font-medium text-amber-600 hover:text-amber-700 dark:text-amber-400">View All →</a>
+                  </div>
+                  <div class="overflow-x-auto">
+                    <table class="w-full">
+                      <thead>
+                        <tr class="border-b border-gray-200 dark:border-gray-700">
+                          <th class="pb-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Tender ID</th>
+                          <th class="pb-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Buyer</th>
+                          <th class="pb-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Watches</th>
+                          <th class="pb-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Value</th>
+                          <th class="pb-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <template x-for="tender in recentTenders" :key="tender.id">
+                          <tr class="border-b border-gray-100 dark:border-gray-700/50">
+                            <td class="py-4">
+                              <a :href="'tender-detail.html?id=' + tender.id" class="text-sm font-medium text-amber-600 hover:text-amber-700 dark:text-amber-400" x-text="tender.id"></a>
+                            </td>
+                            <td class="py-4">
+                              <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="tender.buyer"></p>
+                              <p class="text-xs text-gray-500 dark:text-gray-400" x-text="tender.contact"></p>
+                            </td>
+                            <td class="py-4">
+                              <p class="text-sm text-gray-900 dark:text-white" x-text="tender.watches + ' watches'"></p>
+                              <p class="text-xs text-gray-500 dark:text-gray-400" x-text="tender.offers + ' offers'"></p>
+                            </td>
+                            <td class="py-4 text-right">
+                              <p class="text-sm font-semibold text-gray-900 dark:text-white" x-text="formatPrice(tender.value)"></p>
+                            </td>
+                            <td class="py-4 text-right">
+                              <div class="flex items-center justify-end gap-2">
+                                <button @click="acceptTender(tender.id)" class="px-3 py-1.5 text-xs font-medium text-white bg-green-600 rounded-lg hover:bg-green-700">
+                                  Accept
+                                </button>
+                                <button @click="rejectTender(tender.id)" class="px-3 py-1.5 text-xs font-medium text-white bg-red-600 rounded-lg hover:bg-red-700">
+                                  Reject
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        </template>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+  </body>
+</html>

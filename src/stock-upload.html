@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Stock Upload | Private Label Dubai</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⌚%3C/text%3E%3C/svg%3E">
+  </head>
+  <body
+    x-data="{
+      page: 'stockUpload',
+      'loaded': true,
+      'darkMode': false,
+      'stickyMenu': false,
+      'sidebarToggle': false,
+      'scrollTop': false,
+      'uploadedFile': null,
+      'uploading': false,
+      'uploadComplete': false,
+      defaultFxRates: {
+        GBP: 10.85,  // HKD to GBP
+        EUR: 9.05,   // HKD to EUR
+        USD: 7.78,   // HKD to USD
+        AED: 2.85    // HKD to AED
+      },
+      'fetchingRates': false,
+      'lastRateUpdate': null,
+      'rateError': '',
+      fetchLiveFxRates() {
+        this.fetchingRates = true;
+        this.rateError = '';
+
+        // Fetch HKD rates from exchangerate-api.com
+        fetch('https://api.exchangerate-api.com/v4/latest/HKD')
+          .then(response => response.json())
+          .then(data => {
+            // API returns 1 HKD = X currency, we need currency per HKD (inverse)
+            if (data.rates && data.rates.GBP && data.rates.EUR && data.rates.USD && data.rates.AED) {
+              const newGBPRate = parseFloat((1 / data.rates.GBP).toFixed(2));
+              const newEURRate = parseFloat((1 / data.rates.EUR).toFixed(2));
+              const newUSDRate = parseFloat((1 / data.rates.USD).toFixed(2));
+              const newAEDRate = parseFloat((1 / data.rates.AED).toFixed(2));
+
+              this.defaultFxRates.GBP = newGBPRate;
+              this.defaultFxRates.EUR = newEURRate;
+              this.defaultFxRates.USD = newUSDRate;
+              this.defaultFxRates.AED = newAEDRate;
+              this.lastRateUpdate = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+              this.rateError = '';
+              this.showRateSuccess();
+            } else {
+              this.rateError = 'Invalid response from API';
+            }
+          })
+          .catch(error => {
+            this.rateError = 'Failed to fetch rates: ' + error.message;
+            console.error('FX Rate fetch error:', error);
+          })
+          .finally(() => {
+            this.fetchingRates = false;
+          });
+      },
+      showRateSuccess() {
+        const msg = document.createElement('div');
+        msg.className = 'fixed bottom-4 right-4 p-4 bg-green-100 text-green-700 rounded-lg shadow-lg dark:bg-green-900/30 dark:text-green-400 z-[9999]';
+        msg.textContent = '✓ FX rates updated: GBP ' + this.defaultFxRates.GBP + ' | EUR ' + this.defaultFxRates.EUR + ' | USD ' + this.defaultFxRates.USD + ' | AED ' + this.defaultFxRates.AED;
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 3000);
+      },
+      'uploadResults': {
+        total: 24,
+        serialMatched: 8,
+        refMatched: 10,
+        newWatches: 5,
+        errors: 1,
+        errorDetails: [
+          { row: 23, serial: '', reason: 'Missing serial number' }
+        ],
+        preview: [
+          { serial: '7X9K2M4P', reference: '116710LN', brand: 'Rolex', model: 'GMT-Master II', year: 2015, condition: 'Excellent', box: true, papers: false, costPriceHKD: 84500, priceGBP: 7200, priceEUR: 8400, priceUSD: 6000, priceAED: 2180, fxGBP: 10.85, fxEUR: 9.05, fxUSD: 7.78, fxAED: 2.85, matchType: 'serial' },
+          { serial: '8Y3L5N2Q', reference: '126610LN', brand: 'Rolex', model: 'Submariner Date', year: 2023, condition: 'Unworn', box: true, papers: true, costPriceHKD: 102000, priceGBP: 8500, priceEUR: 9950, priceUSD: null, priceAED: null, fxGBP: 10.85, fxEUR: 9.05, fxUSD: 7.78, fxAED: 2.85, matchType: 'serial' },
+          { serial: '3K7P2M9X', reference: '116500LN', brand: 'Rolex', model: 'Daytona', year: 2022, condition: '', box: null, papers: null, costPriceHKD: 234000, priceGBP: 24500, priceEUR: 28650, priceUSD: 21800, priceAED: 7950, fxGBP: 10.85, fxEUR: 9.05, fxUSD: 7.78, fxAED: 2.85, matchType: 'reference' },
+          { serial: '5L2N8Q4R', reference: '126334', brand: 'Rolex', model: 'Datejust 41', year: 2023, condition: '', box: null, papers: null, costPriceHKD: 74400, priceGBP: 7800, priceEUR: null, priceUSD: null, priceAED: null, fxGBP: 10.85, fxEUR: 9.05, fxUSD: 7.78, fxAED: 2.85, matchType: 'reference' },
+          { serial: '1M9P5R2K', reference: '999.99.99', brand: 'Omega', model: '', year: 2023, condition: '', box: null, papers: null, costPriceHKD: 45800, priceGBP: 4800, priceEUR: 5610, priceUSD: null, priceAED: null, fxGBP: 10.85, fxEUR: 9.05, fxUSD: 7.78, fxAED: 2.85, matchType: 'new' }
+        ]
+      },
+      validatePricing(costHKD, priceGBP, fxGBP = null, priceEUR = null, priceUSD = null, priceAED = null, fxEUR = null, fxUSD = null, fxAED = null) {
+        fxGBP = fxGBP || this.defaultFxRates.GBP;
+        fxEUR = fxEUR || this.defaultFxRates.EUR;
+        fxUSD = fxUSD || this.defaultFxRates.USD;
+        fxAED = fxAED || this.defaultFxRates.AED;
+
+        // GBP is REQUIRED and MUST have 15% margin
+        const minGBP = (costHKD / fxGBP) * 1.15;
+        if (!priceGBP || priceGBP < minGBP) {
+          return { valid: false, error: `GBP price required and must have 15% margin (min: £${minGBP.toFixed(0)})` };
+        }
+
+        // Optional currencies - validate only if provided
+        if (priceEUR) {
+          const minEUR = (costHKD / fxEUR) * 1.15;
+          if (priceEUR < minEUR) {
+            return { valid: false, error: `EUR price €${priceEUR} below 15% margin (min: €${minEUR.toFixed(0)})` };
+          }
+        }
+        if (priceUSD) {
+          const minUSD = (costHKD / fxUSD) * 1.15;
+          if (priceUSD < minUSD) {
+            return { valid: false, error: `USD price $${priceUSD} below 15% margin (min: $${minUSD.toFixed(0)})` };
+          }
+        }
+        if (priceAED) {
+          const minAED = (costHKD / fxAED) * 1.15;
+          if (priceAED < minAED) {
+            return { valid: false, error: `AED price د.إ${priceAED} below 15% margin (min: د.إ${minAED.toFixed(0)})` };
+          }
+        }
+
+        return { valid: true };
+      },
+      simulateUpload() {
+        this.uploading = true;
+        this.uploadedFile = 'supplier_stock_dec2024.csv';
+        setTimeout(() => {
+          this.uploading = false;
+          this.uploadComplete = true;
+        }, 2000);
+      },
+      formatPrice(price, currency = 'GBP') {
+        const symbol = currency === 'EUR' ? '€' : '£';
+        return symbol + price.toLocaleString();
+      }
+    }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-x-hidden overflow-y-auto"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="mx-auto max-w-(--breakpoint-2xl) p-4 md:p-6">
+            <!-- Page Header with FX Rates Button -->
+            <div class="flex items-center justify-between mb-6">
+              <div x-data="{ pageName: `Stock Upload`}">
+                <include src="./partials/breadcrumb.html" />
+              </div>
+              <div class="flex items-center gap-4">
+                <!-- Last Update Time Display -->
+                <div x-show="lastRateUpdate" class="text-xs text-gray-500 dark:text-gray-400">
+                  Updated: <span x-text="lastRateUpdate"></span>
+                </div>
+                <!-- Fetch Live Rates Button -->
+                <button
+                  @click="fetchLiveFxRates()"
+                  :disabled="fetchingRates"
+                  class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all"
+                  :class="fetchingRates ? 'bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600'"
+                >
+                  <svg x-show="!fetchingRates" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  <svg x-show="fetchingRates" class="animate-spin w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  <span x-text="fetchingRates ? 'Fetching...' : 'Fetch Live Rates'"></span>
+                </button>
+              </div>
+            </div>
+
+            <!-- FX Rate Error Message -->
+            <template x-if="rateError">
+              <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg dark:bg-red-900/20 dark:border-red-800">
+                <div class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <div>
+                    <p class="text-sm font-medium text-red-800 dark:text-red-400" x-text="rateError"></p>
+                    <p class="text-xs text-red-700 dark:text-red-500 mt-1">Using default rates (GBP: 10.85, EUR: 9.05)</p>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <!-- Current FX Rates Display -->
+            <div class="mb-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+                <p class="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1">GBP Rate</p>
+                <p class="text-2xl font-bold text-blue-700 dark:text-blue-300" x-text="defaultFxRates.GBP + ' HKD'"></p>
+                <p class="text-xs text-blue-600 dark:text-blue-400 mt-1">per £1</p>
+              </div>
+              <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-lg p-4 border border-emerald-200 dark:border-emerald-800">
+                <p class="text-xs text-emerald-600 dark:text-emerald-400 font-medium mb-1">EUR Rate</p>
+                <p class="text-2xl font-bold text-emerald-700 dark:text-emerald-300" x-text="defaultFxRates.EUR + ' HKD'"></p>
+                <p class="text-xs text-emerald-600 dark:text-emerald-400 mt-1">per €1</p>
+              </div>
+              <div class="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-4 border border-orange-200 dark:border-orange-800">
+                <p class="text-xs text-orange-600 dark:text-orange-400 font-medium mb-1">USD Rate</p>
+                <p class="text-2xl font-bold text-orange-700 dark:text-orange-300" x-text="defaultFxRates.USD + ' HKD'"></p>
+                <p class="text-xs text-orange-600 dark:text-orange-400 mt-1">per $1</p>
+              </div>
+              <div class="bg-rose-50 dark:bg-rose-900/20 rounded-lg p-4 border border-rose-200 dark:border-rose-800">
+                <p class="text-xs text-rose-600 dark:text-rose-400 font-medium mb-1">AED Rate</p>
+                <p class="text-2xl font-bold text-rose-700 dark:text-rose-300" x-text="defaultFxRates.AED + ' HKD'"></p>
+                <p class="text-xs text-rose-600 dark:text-rose-400 mt-1">per د.إ1</p>
+              </div>
+            </div>
+
+            <!-- Upload Section (Before Upload) -->
+            <div x-show="!uploadComplete" class="space-y-6">
+              <!-- CSV Format Info -->
+              <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                <div class="px-5 py-4 sm:px-6 sm:py-5 border-b border-gray-100 dark:border-gray-800">
+                  <div class="flex items-start justify-between">
+                    <div>
+                      <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
+                        CSV Format
+                      </h3>
+                      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        Core currency is GBP (required). Other currencies are optional - we calculate them using live FX rates or your CSV overrides.
+                      </p>
+                    </div>
+                    <div class="text-xs bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full whitespace-nowrap font-medium">
+                      Using live rates
+                    </div>
+                  </div>
+                </div>
+                <div class="p-5 sm:p-6">
+                  <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                      <thead>
+                        <tr class="border-b border-gray-200 dark:border-gray-700">
+                          <th class="text-left py-2 pr-4 font-medium text-gray-700 dark:text-gray-300">Column</th>
+                          <th class="text-left py-2 pr-4 font-medium text-gray-700 dark:text-gray-300">Required</th>
+                          <th class="text-left py-2 pr-4 font-medium text-gray-700 dark:text-gray-300">Example</th>
+                          <th class="text-left py-2 font-medium text-gray-700 dark:text-gray-300">Notes</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Reference Number</td>
+                          <td class="py-2 pr-4"><span class="text-amber-600 font-medium">Required</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">116710LN</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Model code</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Serial Number</td>
+                          <td class="py-2 pr-4"><span class="text-amber-600 font-medium">Required</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">7X9K2M4P</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Unique watch ID</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Brand</td>
+                          <td class="py-2 pr-4"><span class="text-amber-600 font-medium">Required</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">Rolex</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400"></td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Model</td>
+                          <td class="py-2 pr-4"><span class="text-gray-400">Optional</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">GMT-Master II</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Can be blank</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Year</td>
+                          <td class="py-2 pr-4"><span class="text-gray-400">Optional</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">2015</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Can be approximate</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Condition</td>
+                          <td class="py-2 pr-4"><span class="text-gray-400">Optional</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">Excellent</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Unworn / Excellent / Good / Well Worn</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Box</td>
+                          <td class="py-2 pr-4"><span class="text-gray-400">Optional</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">Yes</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Yes / No</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Papers</td>
+                          <td class="py-2 pr-4"><span class="text-gray-400">Optional</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">No</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Yes / No</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Cost Price HKD</td>
+                          <td class="py-2 pr-4"><span class="text-amber-600 font-medium">Required</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">78000</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Cost in Hong Kong dollars</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Sales Price GBP</td>
+                          <td class="py-2 pr-4"><span class="text-amber-600 font-medium">Required</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">8500</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Core currency - your asking price in GBP</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Sales Price EUR</td>
+                          <td class="py-2 pr-4"><span class="text-gray-400">Optional</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">9950</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Leave blank to auto-calculate from HKD + FX rate</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Sales Price USD</td>
+                          <td class="py-2 pr-4"><span class="text-gray-400">Optional</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">7100</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Leave blank to auto-calculate from HKD + FX rate</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Sales Price AED</td>
+                          <td class="py-2 pr-4"><span class="text-gray-400">Optional</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">2600</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Leave blank to auto-calculate from HKD + FX rate</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">FX Rate GBP</td>
+                          <td class="py-2 pr-4"><span class="text-gray-400">Optional Override</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono" x-text="defaultFxRates.GBP"></td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Override live rate (leave blank to use system rate above)</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">FX Rate EUR</td>
+                          <td class="py-2 pr-4"><span class="text-gray-400">Optional Override</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono" x-text="defaultFxRates.EUR"></td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Override live rate (leave blank to use system rate above)</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">FX Rate USD</td>
+                          <td class="py-2 pr-4"><span class="text-gray-400">Optional Override</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono" x-text="defaultFxRates.USD"></td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Override live rate (leave blank to use system rate above)</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">FX Rate AED</td>
+                          <td class="py-2 pr-4"><span class="text-gray-400">Optional Override</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono" x-text="defaultFxRates.AED"></td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Override live rate (leave blank to use system rate above)</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Min Price GBP</td>
+                          <td class="py-2 pr-4"><span class="text-amber-600 font-medium">Required</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">7900</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Enforces 15% margin rule on GBP price. Leave blank = auto-calculate.</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Min Price EUR</td>
+                          <td class="py-2 pr-4"><span class="text-gray-400">Optional</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">9250</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Only used if Sales Price EUR is provided. Auto-calculated if blank.</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Min Price USD</td>
+                          <td class="py-2 pr-4"><span class="text-gray-400">Optional</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">6500</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Only used if Sales Price USD is provided. Auto-calculated if blank.</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-4 font-medium text-gray-800 dark:text-white">Min Price AED</td>
+                          <td class="py-2 pr-4"><span class="text-gray-400">Optional</span></td>
+                          <td class="py-2 pr-4 text-gray-600 dark:text-gray-400 font-mono">2380</td>
+                          <td class="py-2 text-gray-500 dark:text-gray-400">Only used if Sales Price AED is provided. Auto-calculated if blank.</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- Download Template -->
+                  <div class="mt-6 flex items-center gap-4">
+                    <a
+                      href="data:text/csv;charset=utf-8,Reference%20Number,Serial%20Number,Brand,Model,Year,Condition,Box,Papers,Cost%20Price%20HKD,Sales%20Price%20GBP,Sales%20Price%20EUR,Sales%20Price%20USD,Sales%20Price%20AED,FX%20Rate%20GBP,FX%20Rate%20EUR,FX%20Rate%20USD,FX%20Rate%20AED,Min%20Price%20GBP,Min%20Price%20EUR,Min%20Price%20USD,Min%20Price%20AED%0A116710LN,7X9K2M4P,Rolex,GMT-Master%20II,2015,Excellent,Yes,No,84500,7200,8400,6000,2180,10.85,9.05,7.78,2.85,7700,9000,6500,2380%0A126610LN,8Y3L5N2Q,Rolex,Submariner%20Date,2023,Unworn,Yes,Yes,102000,8500,9950,7100,2600,10.85,9.05,7.78,2.85,8700,10500,7500,2900%0A116500LN,3K7P2M9X,Rolex,Daytona,2022,Excellent,Yes,Yes,234000,24500,28650,21800,7950,10.85,9.05,7.78,2.85,26000,31000,24000,8500"
+                      download="stock_template.csv"
+                      class="inline-flex items-center gap-2 text-sm font-medium text-amber-600 hover:text-amber-700"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                      </svg>
+                      Download CSV Template
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- File Upload -->
+              <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                <div class="px-5 py-4 sm:px-6 sm:py-5 border-b border-gray-100 dark:border-gray-800">
+                  <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
+                    Upload Stock CSV
+                  </h3>
+                </div>
+                <div class="p-5 sm:p-6">
+                  <!-- Upload Area -->
+                  <div
+                    class="border-2 border-dashed rounded-lg p-8 text-center transition-all"
+                    :class="uploading ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/10' : 'border-gray-300 dark:border-gray-700'"
+                  >
+                    <!-- Uploading State -->
+                    <div x-show="uploading" class="flex flex-col items-center">
+                      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+                      <p class="mt-4 text-sm font-medium text-amber-600">Processing CSV...</p>
+                      <p class="mt-1 text-xs text-gray-500">Validating rows and checking for duplicates</p>
+                    </div>
+
+                    <!-- Initial State -->
+                    <div x-show="!uploading">
+                      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 48 48">
+                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                      <div class="mt-4">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                          Drag and drop your CSV file here, or click Browse
+                        </p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                          CSV files only
+                        </p>
+                      </div>
+                      <button class="mt-4 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
+                        Browse Files
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Demo Upload Button -->
+                  <div class="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg dark:bg-amber-900/20 dark:border-amber-800">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-start gap-3">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">
+                          <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p class="text-sm font-medium text-amber-800 dark:text-amber-400">Demo Mode</p>
+                          <p class="text-xs text-amber-700 dark:text-amber-500">
+                            Click to simulate a CSV upload with sample watch data
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        @click="simulateUpload()"
+                        class="px-5 py-2.5 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700 shadow-sm"
+                      >
+                        Run Demo Upload
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Info Note -->
+                  <div class="mt-4 p-4 bg-blue-50 rounded-lg dark:bg-blue-900/20">
+                    <div class="flex items-start gap-2">
+                      <svg class="w-5 h-5 text-blue-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1 a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                      </svg>
+                      <div>
+                        <p class="text-sm text-blue-800 dark:text-blue-400">
+                          <strong>All listings created as Pending.</strong> Database matching pre-fills images/specs where available. Add missing details before publishing.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Upload Results (After Upload) -->
+            <div x-show="uploadComplete" x-cloak class="space-y-6">
+              <!-- Summary Cards -->
+              <div class="grid grid-cols-2 gap-4 sm:grid-cols-5">
+                <div class="p-5 bg-white border border-gray-200 rounded-2xl dark:border-gray-800 dark:bg-white/[0.03]">
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Total Rows</p>
+                  <p class="text-3xl font-bold text-gray-900 dark:text-white" x-text="uploadResults.total"></p>
+                </div>
+                <div class="p-5 bg-green-50 border border-green-200 rounded-2xl dark:border-green-800 dark:bg-green-900/20">
+                  <p class="text-sm text-green-600 dark:text-green-400">Serial Match</p>
+                  <p class="text-3xl font-bold text-green-700 dark:text-green-400" x-text="uploadResults.serialMatched"></p>
+                  <p class="text-xs text-green-600 dark:text-green-500 mt-1">Has full details</p>
+                </div>
+                <div class="p-5 bg-blue-50 border border-blue-200 rounded-2xl dark:border-blue-800 dark:bg-blue-900/20">
+                  <p class="text-sm text-blue-600 dark:text-blue-400">Ref Match</p>
+                  <p class="text-3xl font-bold text-blue-700 dark:text-blue-400" x-text="uploadResults.refMatched"></p>
+                  <p class="text-xs text-blue-600 dark:text-blue-500 mt-1">Has model info</p>
+                </div>
+                <div class="p-5 bg-amber-50 border border-amber-200 rounded-2xl dark:border-amber-800 dark:bg-amber-900/20">
+                  <p class="text-sm text-amber-600 dark:text-amber-400">New</p>
+                  <p class="text-3xl font-bold text-amber-700 dark:text-amber-400" x-text="uploadResults.newWatches"></p>
+                  <p class="text-xs text-amber-600 dark:text-amber-500 mt-1">Needs details</p>
+                </div>
+                <div class="p-5 bg-red-50 border border-red-200 rounded-2xl dark:border-red-800 dark:bg-red-900/20">
+                  <p class="text-sm text-red-600 dark:text-red-400">Errors</p>
+                  <p class="text-3xl font-bold text-red-700 dark:text-red-400" x-text="uploadResults.errors"></p>
+                </div>
+              </div>
+
+              <!-- Success Message -->
+              <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl dark:bg-blue-900/20 dark:border-blue-800">
+                <div class="flex items-center gap-3">
+                  <div class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
+                    <svg class="h-5 w-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="font-medium text-blue-800 dark:text-blue-400">
+                      All <span x-text="uploadResults.serialMatched + uploadResults.refMatched + uploadResults.newWatches"></span> watches created as Pending
+                    </p>
+                    <p class="text-sm text-blue-700 dark:text-blue-500">
+                      Pricing imported from CSV. Next: Add missing images/descriptions and publish
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Errors (if any) -->
+              <div x-show="uploadResults.errors > 0" class="rounded-2xl border border-red-200 bg-white dark:border-red-800 dark:bg-white/[0.03]">
+                <div class="px-5 py-4 sm:px-6 sm:py-5 border-b border-red-100 dark:border-red-800 bg-red-50 dark:bg-red-900/20 rounded-t-2xl">
+                  <h3 class="text-base font-medium text-red-800 dark:text-red-400">
+                    Errors & Skipped Rows
+                  </h3>
+                </div>
+                <div class="p-5 sm:p-6">
+                  <table class="w-full text-sm">
+                    <thead>
+                      <tr class="border-b border-gray-200 dark:border-gray-700">
+                        <th class="text-left py-2 pr-4 font-medium text-gray-700 dark:text-gray-300">Row</th>
+                        <th class="text-left py-2 pr-4 font-medium text-gray-700 dark:text-gray-300">Serial</th>
+                        <th class="text-left py-2 font-medium text-gray-700 dark:text-gray-300">Reason</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                      <template x-for="error in uploadResults.errorDetails" :key="error.row">
+                        <tr>
+                          <td class="py-2 pr-4 text-gray-800 dark:text-white" x-text="error.row"></td>
+                          <td class="py-2 pr-4 font-mono text-gray-600 dark:text-gray-400" x-text="error.serial || '—'"></td>
+                          <td class="py-2 text-red-600 dark:text-red-400" x-text="error.reason"></td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Preview of Created Listings -->
+              <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                <div class="px-5 py-4 sm:px-6 sm:py-5 border-b border-gray-100 dark:border-gray-800">
+                  <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
+                    Preview of Imported Listings
+                  </h3>
+                  <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    First 5 listings showing database match status
+                  </p>
+                </div>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm">
+                    <thead class="bg-gray-50 dark:bg-gray-800/50">
+                      <tr>
+                        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Status</th>
+                        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Serial</th>
+                        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Reference</th>
+                        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Brand / Model</th>
+                        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Condition</th>
+                        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Box/Papers</th>
+                        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Cost HKD</th>
+                        <th class="px-5 py-3 text-right text-xs font-medium text-gray-500 uppercase dark:text-gray-400">GBP / EUR</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                      <template x-for="item in uploadResults.preview" :key="item.serial">
+                        <tr>
+                          <td class="px-5 py-3">
+                            <span
+                              class="px-2 py-1 text-xs font-medium rounded-full"
+                              :class="{
+                                'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400': item.matchType === 'serial',
+                                'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400': item.matchType === 'reference',
+                                'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400': item.matchType === 'new'
+                              }"
+                              x-text="item.matchType === 'serial' ? 'Live' : item.matchType === 'reference' ? 'Ref Match' : 'New'"
+                            ></span>
+                          </td>
+                          <td class="px-5 py-3 font-mono text-gray-800 dark:text-white" x-text="item.serial"></td>
+                          <td class="px-5 py-3 font-mono text-gray-600 dark:text-gray-400" x-text="item.reference"></td>
+                          <td class="px-5 py-3">
+                            <p class="font-medium text-gray-800 dark:text-white" x-text="item.brand"></p>
+                            <p class="text-xs text-gray-500" x-text="item.model || '—'"></p>
+                          </td>
+                          <td class="px-5 py-3 text-gray-600 dark:text-gray-400" x-text="item.condition || '—'"></td>
+                          <td class="px-5 py-3">
+                            <div class="flex gap-1">
+                              <span class="px-1.5 py-0.5 text-xs rounded" :class="item.box === true ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : item.box === false ? 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-500' : 'bg-gray-100 text-gray-400'">Box</span>
+                              <span class="px-1.5 py-0.5 text-xs rounded" :class="item.papers === true ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : item.papers === false ? 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-500' : 'bg-gray-100 text-gray-400'">Papers</span>
+                            </div>
+                          </td>
+                          <td class="px-5 py-3 font-medium text-gray-800 dark:text-white" x-text="'HK$' + item.costPriceHKD.toLocaleString()"></td>
+                          <td class="px-5 py-3 text-right">
+                            <div class="text-sm">
+                              <p class="font-medium text-gray-800 dark:text-white" x-text="formatPrice(item.priceGBP, 'GBP')"></p>
+                              <p class="text-xs text-gray-600 dark:text-gray-400" x-text="formatPrice(item.priceEUR, 'EUR')"></p>
+                            </div>
+                          </td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex items-center justify-between">
+                <button
+                  @click="uploadComplete = false; uploadedFile = null"
+                  class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-800"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  Upload Another CSV
+                </button>
+
+                <a
+                  href="product-management.html"
+                  class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700"
+                >
+                  View Pending Stock
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+  </body>
+</html>

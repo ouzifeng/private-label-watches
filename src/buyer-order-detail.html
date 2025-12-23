@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Order Details | Private Label Dubai</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⌚%3C/text%3E%3C/svg%3E">
+  </head>
+  <body
+    x-data="{
+      page: 'buyerOrderDetail',
+      'loaded': true,
+      'darkMode': false,
+      'cartCount': 3,
+      'user': {
+        name: 'James Richardson',
+        email: 'james@watchfinder.co.uk',
+        company: 'Watchfinder',
+        role: 'Buyer'
+      },
+      order: {
+        id: 'ORD-2025-001',
+        tenderRef: 'TND-2025-001',
+        orderDate: '2025-01-10',
+        status: 'delivered',
+        dispatchDate: '2025-01-11',
+        deliveryDate: '2025-01-13',
+        trackingNumber: 'DHL-892374928374',
+        carrier: 'DHL Express',
+        total: 156400.00,
+        watches: [
+          { id: 1, brand: 'Rolex', model: 'Submariner Date', reference: '126610LN', serial: 'P8K9L2M3', year: 2023, dial: 'Black', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop', price: 12850 },
+          { id: 4, brand: 'Omega', model: 'Speedmaster', reference: '310.30.42.50', serial: 'A1B2C3D4', year: 2023, dial: 'Black', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1548169874-53e85f753f1e?w=100&h=100&fit=crop', price: 6450 },
+          { id: 6, brand: 'Rolex', model: 'Datejust 36', reference: '126234', serial: 'X7Y8Z9A1', year: 2023, dial: 'Champagne', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop', price: 7850 },
+          { id: 8, brand: 'Rolex', model: 'Air-King', reference: '126900', serial: 'Q2W3E4R5', year: 2022, dial: 'Black', condition: 'Excellent', box: true, papers: true, image: 'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=100&h=100&fit=crop', price: 6200 },
+          { id: 12, brand: 'Rolex', model: 'Milgauss', reference: '116400GV', serial: 'T5Y6U7I8', year: 2020, dial: 'Green', condition: 'Excellent', box: false, papers: true, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop', price: 7800 },
+          { id: 14, brand: 'Rolex', model: 'OP 41', reference: '124300', serial: 'O9P0A1S2', year: 2023, dial: 'Bright Blue', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=100&h=100&fit=crop', price: 5600 },
+          { id: 17, brand: 'Omega', model: 'Speedmaster Racing', reference: '329.30.44.51', serial: 'D3F4G5H6', year: 2021, dial: 'Yellow', condition: 'Excellent', box: true, papers: true, image: 'https://images.unsplash.com/photo-1548169874-53e85f753f1e?w=100&h=100&fit=crop', price: 4200 },
+          { id: 19, brand: 'Tudor', model: 'Ranger', reference: '79950', serial: 'J7K8L9M0', year: 2023, dial: 'Black', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=100&h=100&fit=crop', price: 2800 },
+          { id: 22, brand: 'Rolex', model: 'Cellini Date', reference: '50519', serial: 'N1B2V3C4', year: 2020, dial: 'Black', condition: 'Very Good', box: true, papers: false, image: 'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=100&h=100&fit=crop', price: 12200 },
+          { id: 3, brand: 'Rolex', model: 'Datejust 41', reference: '126334', serial: 'M5X6C7V8', year: 2023, dial: 'Blue', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=100&h=100&fit=crop', price: 9000 },
+          { id: 10, brand: 'Tudor', model: 'Black Bay 58', reference: '79030N', serial: 'B9N0M1L2', year: 2022, dial: 'Blue', condition: 'Excellent', box: true, papers: true, image: 'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=100&h=100&fit=crop', price: 3200 },
+          { id: 13, brand: 'Omega', model: 'Aqua Terra', reference: '220.10.41.21', serial: 'K3J4H5G6', year: 2023, dial: 'Blue', condition: 'Unworn', box: true, papers: true, image: 'https://images.unsplash.com/photo-1548169874-53e85f753f1e?w=100&h=100&fit=crop', price: 5400 }
+        ]
+      },
+      getStatusConfig(status) {
+        const configs = {
+          'processing': { label: 'Processing', color: 'amber', bgClass: 'bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300' },
+          'shipped': { label: 'Shipped', color: 'blue', bgClass: 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300' },
+          'delivered': { label: 'Delivered', color: 'green', bgClass: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300' }
+        };
+        return configs[status] || configs.processing;
+      },
+      formatCurrency(amount) {
+        return '£' + amount.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      },
+      formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      },
+      downloadInvoice() {
+        alert('Invoice PDF download would start here');
+      },
+      trackShipment() {
+        if (this.order.trackingNumber) {
+          window.open('https://www.dhl.com/gb-en/home/tracking.html?tracking-id=' + this.order.trackingNumber, '_blank');
+        }
+      }
+    }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Container ===== -->
+    <div class="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+      <!-- ===== Top Navigation Bar ===== -->
+      <include src="./partials/buyer-nav.html"></include>
+
+      <!-- ===== Main Content ===== -->
+      <main class="flex-1 py-8">
+        <div class="px-4 mx-auto max-w-screen-2xl sm:px-6 lg:px-8">
+
+          <!-- Breadcrumb & Actions -->
+          <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <a href="buyer-orders.html" class="flex items-center gap-2 text-sm text-gray-600 hover:text-amber-600 dark:text-gray-400 dark:hover:text-amber-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Back to Orders
+            </a>
+
+            <div class="flex items-center gap-3">
+              <button @click="downloadInvoice()" class="inline-flex items-center justify-center gap-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Download Invoice
+              </button>
+              <button x-show="order.trackingNumber" @click="trackShipment()" class="inline-flex items-center justify-center gap-2 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                Track Shipment
+              </button>
+            </div>
+          </div>
+
+          <!-- Order Header -->
+          <div class="mb-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+            <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+              <div class="flex-1">
+                <div class="flex items-start justify-between mb-4">
+                  <div>
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white" x-text="order.id"></h1>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                      Ordered on <span x-text="formatDate(order.orderDate)"></span>
+                      <span class="mx-2">•</span>
+                      From tender <a :href="'buyer-tender-detail.html?id=' + order.tenderRef" class="text-amber-600 hover:text-amber-700 dark:text-amber-400" x-text="order.tenderRef"></a>
+                    </p>
+                  </div>
+                  <span
+                    class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold rounded-full"
+                    :class="getStatusConfig(order.status).bgClass"
+                    x-text="getStatusConfig(order.status).label"
+                  ></span>
+                </div>
+
+                <!-- Order Stats -->
+                <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                  <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-900/50">
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Total Watches</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="order.watches.length"></p>
+                  </div>
+                  <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-900/50">
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Order Total</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="formatCurrency(order.total)"></p>
+                  </div>
+                  <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-900/50" x-show="order.dispatchDate">
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Dispatched</p>
+                    <p class="text-base font-semibold text-gray-900 dark:text-white" x-text="formatDate(order.dispatchDate)"></p>
+                  </div>
+                  <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-900/50" x-show="order.deliveryDate">
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Delivered</p>
+                    <p class="text-base font-semibold text-green-600 dark:text-green-400" x-text="formatDate(order.deliveryDate)"></p>
+                  </div>
+                </div>
+
+                <!-- Tracking Info -->
+                <div x-show="order.trackingNumber" class="mt-4 p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+                  <div class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
+                      <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/>
+                    </svg>
+                    <div class="flex-1">
+                      <p class="text-sm font-medium text-blue-800 dark:text-blue-300 mb-1">Shipment Tracking</p>
+                      <div class="flex flex-col gap-1">
+                        <p class="text-sm text-blue-700 dark:text-blue-400">
+                          Carrier: <span class="font-semibold" x-text="order.carrier"></span>
+                        </p>
+                        <p class="text-sm text-blue-700 dark:text-blue-400">
+                          Tracking: <span class="font-mono font-semibold" x-text="order.trackingNumber"></span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Watches Table -->
+          <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 overflow-hidden">
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+              <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+                Watches in this Order (<span x-text="order.watches.length"></span>)
+              </h2>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Watch</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Reference</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Serial</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Year</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Dial</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Condition</th>
+                    <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Price</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                  <template x-for="(watch, index) in order.watches" :key="watch.id">
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors">
+                      <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                          <img :src="watch.image" :alt="watch.model" class="w-12 h-12 rounded-lg object-cover bg-gray-100 flex-shrink-0" />
+                          <div>
+                            <p class="font-semibold text-gray-900 dark:text-white" x-text="watch.brand"></p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400" x-text="watch.model"></p>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white" x-text="watch.reference"></td>
+                      <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400" x-text="watch.serial"></td>
+                      <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400" x-text="watch.year"></td>
+                      <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400" x-text="watch.dial"></td>
+                      <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400" x-text="watch.condition"></td>
+                      <td class="px-6 py-4 text-right">
+                        <span class="text-base font-bold text-gray-900 dark:text-white" x-text="formatCurrency(watch.price)"></span>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+                <tfoot class="bg-gray-50 dark:bg-gray-900/50 border-t-2 border-gray-300 dark:border-gray-600">
+                  <tr>
+                    <td colspan="6" class="px-6 py-4 text-right text-lg font-semibold text-gray-900 dark:text-white">Order Total</td>
+                    <td class="px-6 py-4 text-right">
+                      <span class="text-2xl font-bold text-gray-900 dark:text-white" x-text="formatCurrency(order.total)"></span>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- ===== Footer ===== -->
+      <footer class="py-6 mt-8 bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+        <div class="px-4 mx-auto max-w-screen-2xl sm:px-6 lg:px-8">
+          <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              © 2025 Private Label Dubai. All rights reserved.
+            </p>
+            <div class="flex items-center gap-6 text-sm">
+              <a href="#" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">Help & Support</a>
+              <a href="#" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">Terms & Conditions</a>
+              <a href="#" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">Privacy Policy</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- ===== Page Container End ===== -->
+  </body>
+</html>

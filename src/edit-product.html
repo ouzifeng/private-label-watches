@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Edit Watch Listing | Private Label Dubai</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⌚%3C/text%3E%3C/svg%3E">
+  </head>
+  <body
+    x-data="{
+      page: 'editProduct',
+      'loaded': true,
+      'darkMode': false,
+      'stickyMenu': false,
+      'sidebarToggle': false,
+      'scrollTop': false,
+
+      // Sample watch data (would come from URL params in real app)
+      watch: {
+        serial: '7X9K2M4P',
+        reference: '116710LN',
+        brand: 'Rolex',
+        model: 'GMT-Master II',
+        year: 2015,
+        condition: 'Excellent',
+        box: true,
+        papers: false,
+        costPrice: 7200,
+        salesPrice: 8500,
+        minPrice: 7900,
+        status: 'pending',
+        image: null,
+        description: ''
+      },
+
+      formatPrice(price) {
+        return '£' + price.toLocaleString();
+      },
+
+      saveWatch() {
+        // In demo, just show success message and redirect
+        alert('Watch listing saved successfully');
+        window.location.href = 'product-management.html';
+      },
+
+      saveAndPublish() {
+        // Check completeness
+        const missing = [];
+        if (!this.watch.image) missing.push('Image');
+        if (!this.watch.description) missing.push('Description');
+        if (!this.watch.model) missing.push('Model');
+        if (!this.watch.year) missing.push('Year');
+        if (!this.watch.condition) missing.push('Condition');
+
+        if (missing.length > 0) {
+          alert('Please complete required fields: ' + missing.join(', '));
+          return;
+        }
+
+        alert('Watch saved and published to buyers');
+        window.location.href = 'product-management.html';
+      }
+    }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-x-hidden overflow-y-auto"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="mx-auto max-w-5xl p-4 md:p-6">
+            <!-- Breadcrumb Start -->
+            <div x-data="{ pageName: `Edit Watch Listing`}">
+              <include src="./partials/breadcrumb.html" />
+            </div>
+            <!-- Breadcrumb End -->
+
+            <!-- Header -->
+            <div class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white" x-text="watch.brand + ' ' + watch.model"></h2>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                  <span x-text="watch.reference"></span> - Serial: <span class="font-mono" x-text="watch.serial"></span>
+                </p>
+              </div>
+              <a
+                href="product-management.html"
+                class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Inventory
+              </a>
+            </div>
+
+            <!-- Status Badge -->
+            <div class="mb-6">
+              <span
+                class="px-3 py-1.5 text-sm font-medium rounded-full"
+                :class="watch.status === 'published' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'"
+                x-text="watch.status === 'published' ? 'Published' : 'Pending'"
+              ></span>
+            </div>
+
+            <!-- Main Form -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <!-- Left Column - Image -->
+              <div class="lg:col-span-1">
+                <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                  <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Watch Image</h3>
+
+                  <!-- Image Preview -->
+                  <div class="mb-4 aspect-square overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                    <template x-if="watch.image">
+                      <img :src="watch.image" alt="Watch" class="h-full w-full object-cover" />
+                    </template>
+                    <template x-if="!watch.image">
+                      <svg class="w-20 h-20 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </template>
+                  </div>
+
+                  <!-- Image URL Input -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Image URL</label>
+                    <input
+                      type="text"
+                      x-model="watch.image"
+                      placeholder="https://..."
+                      class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    />
+                    <p class="mt-2 text-xs text-gray-500">Enter image URL or upload to reference database</p>
+                  </div>
+
+                  <!-- Quick Actions -->
+                  <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <a href="database.html" class="text-sm text-amber-600 hover:text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                      </svg>
+                      Find image in database
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Read-Only Info Card -->
+                <div class="mt-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                  <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">From CSV Import</h3>
+                  <div class="space-y-3">
+                    <div>
+                      <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Serial Number</label>
+                      <p class="text-sm font-mono text-gray-900 dark:text-white" x-text="watch.serial"></p>
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Reference</label>
+                      <p class="text-sm font-mono text-gray-900 dark:text-white" x-text="watch.reference"></p>
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Brand</label>
+                      <p class="text-sm text-gray-900 dark:text-white" x-text="watch.brand"></p>
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Cost Price</label>
+                      <p class="text-lg font-semibold text-gray-900 dark:text-white" x-text="formatPrice(watch.costPrice)"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Column - Details & Pricing -->
+              <div class="lg:col-span-2 space-y-6">
+                <!-- Basic Details -->
+                <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                  <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Watch Details</h3>
+
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Model Name</label>
+                      <input
+                        type="text"
+                        x-model="watch.model"
+                        placeholder="e.g. Submariner Date"
+                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
+                      <input
+                        type="number"
+                        x-model="watch.year"
+                        placeholder="2023"
+                        min="1900"
+                        max="2025"
+                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Condition</label>
+                    <select
+                      x-model="watch.condition"
+                      class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    >
+                      <option value="">Select condition</option>
+                      <option value="Unworn">Unworn</option>
+                      <option value="Excellent">Excellent</option>
+                      <option value="Good">Good</option>
+                      <option value="Well Worn">Well Worn</option>
+                    </select>
+                  </div>
+
+                  <div class="mt-4 flex items-center gap-6">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" x-model="watch.box" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500">
+                      <span class="text-sm text-gray-700 dark:text-gray-300">Original Box</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" x-model="watch.papers" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500">
+                      <span class="text-sm text-gray-700 dark:text-gray-300">Papers / Certificate</span>
+                    </label>
+                  </div>
+
+                  <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+                    <textarea
+                      x-model="watch.description"
+                      rows="4"
+                      placeholder="Describe the watch condition, any marks, included accessories, service history..."
+                      class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    ></textarea>
+                  </div>
+                </div>
+
+                <!-- Pricing -->
+                <div class="rounded-2xl border border-amber-200 bg-amber-50 p-6 dark:border-amber-800 dark:bg-amber-900/20">
+                  <h3 class="text-lg font-semibold text-amber-900 dark:text-amber-400 mb-4">Pricing Strategy</h3>
+
+                  <div class="grid grid-cols-3 gap-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Cost Price</label>
+                      <div class="p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                        <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="formatPrice(watch.costPrice)"></p>
+                        <p class="text-xs text-gray-500 mt-1">From CSV import</p>
+                      </div>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Sales Price</label>
+                      <input
+                        type="number"
+                        x-model.number="watch.salesPrice"
+                        min="0"
+                        step="100"
+                        class="w-full px-3 py-3 text-lg font-semibold border-2 border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-green-600 dark:text-white"
+                      />
+                      <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Public asking price</p>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Min Accepted Price</label>
+                      <input
+                        type="number"
+                        x-model.number="watch.minPrice"
+                        min="0"
+                        step="100"
+                        class="w-full px-3 py-3 text-lg font-semibold border-2 border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:border-amber-600 dark:text-white"
+                      />
+                      <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Lowest offer accepted</p>
+                    </div>
+                  </div>
+
+                  <!-- Margin Indicator -->
+                  <div class="mt-4 p-3 bg-white dark:bg-gray-800 rounded-lg">
+                    <div class="flex items-center justify-between text-sm">
+                      <span class="text-gray-600 dark:text-gray-400">Margin (Sales - Cost):</span>
+                      <span class="font-semibold text-green-600 dark:text-green-400" x-text="formatPrice(watch.salesPrice - watch.costPrice)"></span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm mt-1">
+                      <span class="text-gray-600 dark:text-gray-400">Margin %:</span>
+                      <span class="font-semibold text-green-600 dark:text-green-400" x-text="Math.round(((watch.salesPrice - watch.costPrice) / watch.costPrice) * 100) + '%'"></span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm mt-1">
+                      <span class="text-gray-600 dark:text-gray-400">Min Margin:</span>
+                      <span class="font-semibold text-amber-600 dark:text-amber-400" x-text="formatPrice(watch.minPrice - watch.costPrice)"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                  <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                      <p class="text-sm text-gray-600 dark:text-gray-400">Ready to publish?</p>
+                      <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Complete all required fields to make this listing live to buyers</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                      <button
+                        @click="saveWatch()"
+                        class="px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600"
+                      >
+                        Save Draft
+                      </button>
+                      <button
+                        @click="saveAndPublish()"
+                        class="px-6 py-3 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 flex items-center gap-2"
+                      >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        Save & Publish
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+  </body>
+</html>

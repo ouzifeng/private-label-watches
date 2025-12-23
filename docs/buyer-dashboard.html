@@ -7,7 +7,8 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>My Dashboard | Purbeck Ice Cream B2B Portal</title>
+    <title>My Dashboard | Private Label Dubai</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⌚</text></svg>">
   <link rel="icon" href="favicon-purbeck.png"><link href="style.css" rel="stylesheet"></head>
   <body
     x-data="{
@@ -16,22 +17,21 @@
       'darkMode': false,
       'cartCount': 3,
       'user': {
-        name: 'Sarah Mitchell',
-        email: 'sarah.mitchell@thecornishcafe.co.uk',
-        company: 'The Cornish Cafe',
+        name: 'James Richardson',
+        email: 'james@watchfinder.co.uk',
+        company: 'Watchfinder',
         role: 'Buyer'
       },
       'stats': {
-        ordersThisMonth: 14,
-        pendingApprovals: 1,
-        totalSpent: 2456.75,
-        topProduct: 'Vanilla Bean'
+        ordersThisMonth: 3,
+        pendingTenders: 2,
+        totalSpent: 285400.00,
+        watchesPurchased: 47
       },
       'recentOrders': [
-        { id: 'ORD-2025-0345', date: '2025-01-20', items: 6, total: 148.00, status: 'delivered', products: 'Vanilla Bean, Serious Chocolate, Sorbet' },
-        { id: 'ORD-2025-0343', date: '2025-01-18', items: 12, total: 312.50, status: 'delivered', products: 'Vanilla Bean, Honeycomb Hash, Chocolate Orange' },
-        { id: 'ORD-2025-0340', date: '2025-01-15', items: 8, total: 208.00, status: 'approved', products: 'Serious Chocolate, Cherry Sorbet' },
-        { id: 'ORD-2025-0339', date: '2025-01-12', items: 10, total: 260.50, status: 'pending', products: 'Vanilla Bean, Orange Choc Chip' }
+        { id: 'ORD-2025-001', date: '2025-01-10', items: 12, total: 156400.00, status: 'delivered', products: 'Rolex Submariner, Patek Philippe Nautilus, Omega Speedmaster' },
+        { id: 'ORD-2025-015', date: '2025-01-15', items: 8, total: 125300.00, status: 'delivered', products: 'Rolex Daytona, Audemars Piguet Royal Oak' },
+        { id: 'TND-2025-003', date: '2025-01-18', items: 15, total: 245600.00, status: 'pending', products: 'Cartier Santos, Rolex GMT-Master II, Patek Philippe Calatrava' }
       ],
       getBudgetPercent(used, total) {
         return Math.round((used / total) * 100);
@@ -81,12 +81,9 @@
             <!-- Left: Logo & Nav -->
             <div class="flex items-center gap-8">
               <!-- Logo -->
-              <a href="buyer-dashboard.html" class="flex items-center gap-3">
-                <img
-                  src="src/images/purbeck_logo.png"
-                  alt="Purbeck Ice Cream"
-                  class="w-[120px] h-auto"
-                />
+              <a href="buyer-dashboard.html" class="flex items-center gap-1">
+                <span class="text-2xl font-bold text-gray-900 dark:text-white">Private Label</span>
+                <span class="text-2xl font-bold text-amber-600"> Dubai</span>
               </a>
 
               <!-- Main Navigation -->
@@ -101,19 +98,13 @@
                   href="buyer-products.html"
                   class="text-sm font-medium text-gray-700 transition-colors hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400"
                 >
-                  Products
+                  Browse Stock
                 </a>
                 <a
                   href="buyer-orders.html"
                   class="text-sm font-medium text-gray-700 transition-colors hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400"
                 >
                   My Orders
-                </a>
-                <a
-                  href="buyer-budget.html"
-                  class="text-sm font-medium text-gray-700 transition-colors hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400"
-                >
-                  Budget
                 </a>
               </nav>
             </div>
@@ -125,7 +116,7 @@
                 <div class="relative">
                   <input
                     type="search"
-                    placeholder="Search products..."
+                    placeholder="Search watches..."
                     class="h-10 w-64 rounded-lg border border-gray-300 pr-4 pl-10 text-sm focus:border-transparent focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
                   />
                   <svg
@@ -308,7 +299,7 @@
               Welcome back, <span x-text="user.name.split(' ')[0]"></span>! 👋
             </h1>
             <p class="mt-2 text-gray-600 dark:text-gray-400">
-              Here's what's happening with your ice cream orders today.
+              Here's what's happening with your watch orders and tenders today.
             </p>
           </div>
 
@@ -348,7 +339,7 @@
               ></p>
             </div>
 
-            <!-- Card 2: Pending Approvals -->
+            <!-- Card 2: Pending Tenders -->
             <div
               class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800"
             >
@@ -372,11 +363,11 @@
                 </div>
               </div>
               <p class="text-sm text-gray-500 dark:text-gray-400">
-                Pending Approvals
+                Pending Tenders
               </p>
               <p
                 class="mt-2 text-3xl font-bold text-gray-900 dark:text-white"
-                x-text="stats.pendingApprovals"
+                x-text="stats.pendingTenders"
               ></p>
             </div>
 
@@ -412,16 +403,16 @@
               ></p>
             </div>
 
-            <!-- Card 4: Top Product -->
+            <!-- Card 4: Total Watches -->
             <div
               class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800"
             >
               <div class="mb-4 flex items-center justify-between">
                 <div
-                  class="flex h-12 w-12 items-center justify-center rounded-xl bg-pink-50 dark:bg-pink-900/20"
+                  class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-900/20"
                 >
                   <svg
-                    class="h-6 w-6 text-pink-600 dark:text-pink-400"
+                    class="h-6 w-6 text-blue-600 dark:text-blue-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -430,17 +421,17 @@
                       stroke-linecap="round"
                       stroke-linejoin="round"
                       stroke-width="2"
-                      d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
                 </div>
               </div>
               <p class="text-sm text-gray-500 dark:text-gray-400">
-                Top Product
+                Total Watches
               </p>
               <p
                 class="mt-2 text-3xl font-bold text-gray-900 dark:text-white"
-                x-text="stats.topProduct"
+                x-text="stats.watchesPurchased"
               ></p>
             </div>
           </div>
@@ -525,7 +516,7 @@
             class="flex flex-col items-center justify-between gap-4 sm:flex-row"
           >
             <p class="text-sm text-gray-500 dark:text-gray-400">
-              © 2025 Purbeck Ice Cream. All rights reserved.
+              © 2025 Private Label Dubai. All rights reserved.
             </p>
             <div class="flex items-center gap-6 text-sm">
               <a

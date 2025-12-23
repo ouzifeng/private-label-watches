@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Watch Database | Private Label Dubai</title>
+  </head>
+  <body
+    x-data="{
+      page: 'database',
+      'loaded': true,
+      'darkMode': false,
+      'stickyMenu': false,
+      'sidebarToggle': false,
+      'scrollTop': false,
+
+      // Tab state
+      activeTab: 'reference',
+      searchQuery: '',
+      filterBrand: 'all',
+
+      // Reference Database (by model)
+      referenceDB: [
+        { reference: '126610LN', brand: 'Rolex', model: 'Submariner Date', dial: 'Black', size: '41mm', material: 'Steel', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop', watchCount: 12 },
+        { reference: '116500LN', brand: 'Rolex', model: 'Daytona', dial: 'White (Panda)', size: '40mm', material: 'Steel', image: 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=100&h=100&fit=crop', watchCount: 8 },
+        { reference: '126334', brand: 'Rolex', model: 'Datejust 41', dial: 'Blue', size: '41mm', material: 'Steel/White Gold', image: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=100&h=100&fit=crop', watchCount: 15 },
+        { reference: '116710LN', brand: 'Rolex', model: 'GMT-Master II', dial: 'Black', size: '40mm', material: 'Steel', image: null, watchCount: 6 },
+        { reference: '310.30.42.50', brand: 'Omega', model: 'Speedmaster Moonwatch', dial: 'Black', size: '42mm', material: 'Steel', image: 'https://images.unsplash.com/photo-1548169874-53e85f753f1e?w=100&h=100&fit=crop', watchCount: 9 },
+        { reference: '15500ST', brand: 'Audemars Piguet', model: 'Royal Oak', dial: 'Blue', size: '41mm', material: 'Steel', image: 'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=100&h=100&fit=crop', watchCount: 4 },
+        { reference: '5711/1A', brand: 'Patek Philippe', model: 'Nautilus', dial: 'Blue', size: '40mm', material: 'Steel', image: null, watchCount: 2 },
+        { reference: '126613LB', brand: 'Rolex', model: 'Submariner Two-Tone', dial: 'Blue', size: '41mm', material: 'Steel/Gold', image: null, watchCount: 3 }
+      ],
+
+      // Serial Database (specific watches we've seen)
+      serialDB: [
+        { serial: '7X9K2M4P', reference: '116710LN', brand: 'Rolex', model: 'GMT-Master II', year: 2015, condition: 'Excellent', box: true, papers: false, description: 'Light wear on clasp, crystal perfect', lastSeen: '2024-12-10', timesSold: 2 },
+        { serial: '8Y3L5N2Q', reference: '126610LN', brand: 'Rolex', model: 'Submariner Date', year: 2023, condition: 'Unworn', box: true, papers: true, description: 'Complete set with warranty card dated 2023', lastSeen: '2024-12-14', timesSold: 1 },
+        { serial: '3K7P2M9X', reference: '116500LN', brand: 'Rolex', model: 'Daytona', year: 2022, condition: 'Excellent', box: true, papers: true, description: 'Panda dial, excellent condition with light desk diving marks', lastSeen: '2024-12-01', timesSold: 3 },
+        { serial: '5L2N8Q4R', reference: '126334', brand: 'Rolex', model: 'Datejust 41', year: 2023, condition: 'Good', box: false, papers: true, description: 'Missing original box, has papers', lastSeen: '2024-11-20', timesSold: 1 },
+        { serial: '1M9P5R2K', reference: '310.30.42.50', brand: 'Omega', model: 'Speedmaster', year: 2023, condition: 'Unworn', box: true, papers: true, description: 'Hesalite crystal, full set with all accessories', lastSeen: '2024-12-12', timesSold: 2 },
+        { serial: '9Z4R7K2M', reference: '15500ST', brand: 'Audemars Piguet', model: 'Royal Oak', year: 2022, condition: 'Excellent', box: true, papers: true, description: 'Blue dial, 41mm steel, minor bracelet marks', lastSeen: '2024-12-08', timesSold: 1 }
+      ],
+
+      // Brands for filter
+      brands: ['Rolex', 'Omega', 'Audemars Piguet', 'Patek Philippe'],
+
+      // Edit modal
+      editRefModal: false,
+      editingRef: null,
+
+      // Computed
+      get filteredReferences() {
+        return this.referenceDB.filter(ref => {
+          if (this.filterBrand !== 'all' && ref.brand !== this.filterBrand) return false;
+          if (this.searchQuery) {
+            const query = this.searchQuery.toLowerCase();
+            return ref.reference.toLowerCase().includes(query) ||
+                   ref.brand.toLowerCase().includes(query) ||
+                   ref.model.toLowerCase().includes(query);
+          }
+          return true;
+        });
+      },
+
+      get filteredSerials() {
+        return this.serialDB.filter(watch => {
+          if (this.filterBrand !== 'all' && watch.brand !== this.filterBrand) return false;
+          if (this.searchQuery) {
+            const query = this.searchQuery.toLowerCase();
+            return watch.serial.toLowerCase().includes(query) ||
+                   watch.reference.toLowerCase().includes(query) ||
+                   watch.brand.toLowerCase().includes(query) ||
+                   watch.model.toLowerCase().includes(query);
+          }
+          return true;
+        });
+      },
+
+      // Methods
+      openEditRef(ref) {
+        this.editingRef = JSON.parse(JSON.stringify(ref));
+        this.editRefModal = true;
+      },
+
+      saveRef() {
+        const index = this.referenceDB.findIndex(r => r.reference === this.editingRef.reference);
+        if (index > -1) {
+          this.referenceDB[index] = this.editingRef;
+        }
+        this.editRefModal = false;
+      }
+    }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-x-hidden overflow-y-auto"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="mx-auto max-w-(--breakpoint-2xl) p-4 md:p-6">
+            <!-- Breadcrumb Start -->
+            <div x-data="{ pageName: `Watch Database`}">
+              <include src="./partials/breadcrumb.html" />
+            </div>
+            <!-- Breadcrumb End -->
+
+            <!-- Header -->
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+                Watch Database
+              </h2>
+              <p class="text-sm text-gray-500 dark:text-gray-400">
+                Reference data and historical watch records - used for auto-matching on CSV upload
+              </p>
+            </div>
+
+            <!-- Info Banner -->
+            <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl dark:bg-blue-900/20 dark:border-blue-800">
+              <div class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-blue-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+                <div>
+                  <p class="text-sm text-blue-800 dark:text-blue-400">
+                    <strong>How database matching works:</strong>
+                  </p>
+                  <ul class="mt-1 text-sm text-blue-700 dark:text-blue-500 list-disc list-inside">
+                    <li><strong>Serial match</strong> - Same physical watch you've handled before - goes live immediately with all saved data</li>
+                    <li><strong>Reference match</strong> - Same model - auto-fills image and specs, but needs condition details</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="mb-6">
+              <div class="flex flex-wrap items-center gap-4 border-b border-gray-200 dark:border-gray-700">
+                <button
+                  @click="activeTab = 'reference'; searchQuery = ''"
+                  class="pb-3 text-sm font-medium border-b-2 transition-colors"
+                  :class="activeTab === 'reference' ? 'border-amber-600 text-amber-600' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'"
+                >
+                  Reference Database
+                  <span class="ml-1 px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400" x-text="referenceDB.length"></span>
+                </button>
+                <button
+                  @click="activeTab = 'serial'; searchQuery = ''"
+                  class="pb-3 text-sm font-medium border-b-2 transition-colors"
+                  :class="activeTab === 'serial' ? 'border-amber-600 text-amber-600' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'"
+                >
+                  Serial Database
+                  <span class="ml-1 px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400" x-text="serialDB.length"></span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="mb-6 flex flex-wrap items-center gap-4">
+              <div class="relative flex-1 min-w-[200px] max-w-md">
+                <input
+                  type="text"
+                  x-model="searchQuery"
+                  :placeholder="activeTab === 'reference' ? 'Search by reference, brand, model...' : 'Search by serial, reference, brand...'"
+                  class="w-full py-2.5 pl-10 pr-4 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                />
+                <svg class="absolute left-3 top-3 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+              </div>
+              <select
+                x-model="filterBrand"
+                class="py-2.5 px-4 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+              >
+                <option value="all">All Brands</option>
+                <template x-for="brand in brands" :key="brand">
+                  <option :value="brand" x-text="brand"></option>
+                </template>
+              </select>
+            </div>
+
+            <!-- Reference Database Table -->
+            <div x-show="activeTab === 'reference'" class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] overflow-hidden">
+              <div class="px-5 py-4 sm:px-6 sm:py-5 border-b border-gray-100 dark:border-gray-800 bg-blue-50 dark:bg-blue-900/20">
+                <h3 class="text-base font-medium text-blue-800 dark:text-blue-400">
+                  Reference Database
+                </h3>
+                <p class="mt-1 text-sm text-blue-600 dark:text-blue-500">
+                  Model information - images and specs by reference number
+                </p>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead class="bg-gray-50 dark:bg-gray-800/50">
+                    <tr>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Image</th>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Reference</th>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Brand / Model</th>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Specs</th>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Watches</th>
+                      <th class="px-5 py-3 text-right text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                    <template x-for="ref in filteredReferences" :key="ref.reference">
+                      <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                        <td class="px-5 py-4">
+                          <div class="h-12 w-12 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                            <template x-if="ref.image">
+                              <img :src="ref.image" alt="Watch" class="h-full w-full object-cover" />
+                            </template>
+                            <template x-if="!ref.image">
+                              <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                            </template>
+                          </div>
+                        </td>
+                        <td class="px-5 py-4 font-mono text-gray-800 dark:text-white" x-text="ref.reference"></td>
+                        <td class="px-5 py-4">
+                          <p class="font-medium text-gray-800 dark:text-white" x-text="ref.brand"></p>
+                          <p class="text-xs text-gray-500" x-text="ref.model"></p>
+                        </td>
+                        <td class="px-5 py-4">
+                          <div class="flex flex-wrap gap-1">
+                            <span class="px-1.5 py-0.5 text-xs rounded bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" x-text="ref.size"></span>
+                            <span class="px-1.5 py-0.5 text-xs rounded bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" x-text="ref.dial"></span>
+                            <span class="px-1.5 py-0.5 text-xs rounded bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" x-text="ref.material"></span>
+                          </div>
+                        </td>
+                        <td class="px-5 py-4">
+                          <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" x-text="ref.watchCount + ' sold'"></span>
+                        </td>
+                        <td class="px-5 py-4 text-right">
+                          <button
+                            @click="openEditRef(ref)"
+                            class="px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                          >
+                            Edit
+                          </button>
+                        </td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Serial Database Table -->
+            <div x-show="activeTab === 'serial'" class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] overflow-hidden">
+              <div class="px-5 py-4 sm:px-6 sm:py-5 border-b border-gray-100 dark:border-gray-800 bg-green-50 dark:bg-green-900/20">
+                <h3 class="text-base font-medium text-green-800 dark:text-green-400">
+                  Serial Database
+                </h3>
+                <p class="mt-1 text-sm text-green-600 dark:text-green-500">
+                  Specific watch records - exact watches you've handled before
+                </p>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead class="bg-gray-50 dark:bg-gray-800/50">
+                    <tr>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Serial</th>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Reference</th>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Brand / Model</th>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Details</th>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Description</th>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">History</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                    <template x-for="watch in filteredSerials" :key="watch.serial">
+                      <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                        <td class="px-5 py-4 font-mono font-medium text-gray-800 dark:text-white" x-text="watch.serial"></td>
+                        <td class="px-5 py-4 font-mono text-gray-600 dark:text-gray-400" x-text="watch.reference"></td>
+                        <td class="px-5 py-4">
+                          <p class="font-medium text-gray-800 dark:text-white" x-text="watch.brand"></p>
+                          <p class="text-xs text-gray-500" x-text="watch.model + ' (' + watch.year + ')'"></p>
+                        </td>
+                        <td class="px-5 py-4">
+                          <div class="flex flex-wrap gap-1">
+                            <span class="px-1.5 py-0.5 text-xs rounded bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" x-text="watch.condition"></span>
+                            <span class="px-1.5 py-0.5 text-xs rounded" :class="watch.box ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-gray-100 text-gray-500'">Box</span>
+                            <span class="px-1.5 py-0.5 text-xs rounded" :class="watch.papers ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-gray-100 text-gray-500'">Papers</span>
+                          </div>
+                        </td>
+                        <td class="px-5 py-4 max-w-xs">
+                          <p class="text-xs text-gray-600 dark:text-gray-400 truncate" x-text="watch.description"></p>
+                        </td>
+                        <td class="px-5 py-4">
+                          <p class="text-xs text-gray-500">Last: <span x-text="watch.lastSeen"></span></p>
+                          <p class="text-xs text-green-600 dark:text-green-400" x-text="'Sold ' + watch.timesSold + 'x'"></p>
+                        </td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+
+    <!-- Edit Reference Modal -->
+    <template x-if="editRefModal && editingRef">
+      <div class="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-lg w-full">
+          <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Edit Reference</h3>
+                <p class="text-sm text-gray-500" x-text="editingRef.reference"></p>
+              </div>
+              <button @click="editRefModal = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="p-6 space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Image URL</label>
+              <input
+                type="text"
+                x-model="editingRef.image"
+                placeholder="https://..."
+                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              />
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Brand</label>
+                <input
+                  type="text"
+                  x-model="editingRef.brand"
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Model</label>
+                <input
+                  type="text"
+                  x-model="editingRef.model"
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Size</label>
+                <input
+                  type="text"
+                  x-model="editingRef.size"
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dial</label>
+                <input
+                  type="text"
+                  x-model="editingRef.dial"
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Material</label>
+                <input
+                  type="text"
+                  x-model="editingRef.material"
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
+            <button
+              @click="editRefModal = false"
+              class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600"
+            >
+              Cancel
+            </button>
+            <button
+              @click="saveRef()"
+              class="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700"
+            >
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </template>
+  </body>
+</html>

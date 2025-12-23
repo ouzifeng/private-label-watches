@@ -7,7 +7,8 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>My Orders | Purbeck Ice Cream B2B Portal</title>
+    <title>My Orders & Tenders | Private Label Dubai</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⌚</text></svg>">
   <link rel="icon" href="favicon-purbeck.png"><link href="style.css" rel="stylesheet"></head>
   <body
     x-data="{
@@ -15,128 +16,110 @@
       'loaded': true,
       'darkMode': false,
       'cartCount': 3,
+      'activeTab': new URLSearchParams(window.location.search).get('tab') || 'orders',
       'user': {
-        name: 'Sarah Mitchell',
-        email: 'sarah.mitchell@thecornishcafe.co.uk',
-        company: 'The Cornish Cafe',
+        name: 'James Richardson',
+        email: 'james@watchfinder.co.uk',
+        company: 'Watchfinder',
         role: 'Buyer'
       },
-      'filterStatus': 'all',
-      'filterTimeframe': 'all',
       'orders': [
         {
-          id: 'ORD-2025-0348',
-          date: '2025-01-20',
-          status: 'delivered',
-          items: 6,
-          total: 148.00,
-          dispatchDate: '2025-01-15',
-          deliveryDate: '2025-01-20',
-          poNumber: 'PO-CORN-2025-0048',
-          items_preview: ['Vanilla Bean', 'Serious Chocolate', 'Cherry Sorbet']
-        },
-        {
-          id: 'ORD-2025-0346',
-          date: '2025-01-18',
-          status: 'dispatched',
-          items: 12,
-          total: 312.50,
-          dispatchDate: '2025-01-18',
-          estimatedDelivery: '2025-01-25',
-          poNumber: 'PO-CORN-2025-0047',
-          items_preview: ['Vanilla Bean', 'Honeycomb Hash', 'Chocolate Orange']
-        },
-        {
-          id: 'ORD-2025-0344',
-          date: '2025-01-15',
-          status: 'approved',
-          items: 8,
-          total: 208.00,
-          dispatchDate: '2025-01-22',
-          poNumber: 'PO-CORN-2025-0046',
-          items_preview: ['Serious Chocolate', 'Cherry Sorbet']
-        },
-        {
-          id: 'ORD-2025-0342',
-          date: '2025-01-12',
-          status: 'delivered',
-          items: 10,
-          total: 260.50,
-          dispatchDate: '2025-01-08',
-          deliveryDate: '2025-01-12',
-          poNumber: 'PO-CORN-2025-0045',
-          items_preview: ['Vanilla Bean', 'Orange Choc Chip']
-        },
-        {
-          id: 'ORD-2025-0340',
+          id: 'ORD-2025-001',
           date: '2025-01-10',
           status: 'delivered',
-          items: 5,
-          total: 130.00,
-          dispatchDate: '2025-01-08',
-          deliveryDate: '2025-01-10',
-          poNumber: 'PO-CORN-2025-0044',
-          items_preview: ['Honeycomb Hash', 'Chocolate Orange']
+          watches: 12,
+          total: 156400.00,
+          dispatchDate: '2025-01-11',
+          deliveryDate: '2025-01-13',
+          tenderRef: 'TND-2025-001',
+          watches_preview: ['Rolex Submariner 126610LN', 'Patek Philippe Nautilus 5711/1A', 'Omega Speedmaster 310.30.42.50']
         },
         {
-          id: 'ORD-2025-0338',
-          date: '2025-01-08',
-          status: 'delivered',
-          items: 15,
-          total: 397.50,
-          dispatchDate: '2025-01-08',
-          deliveryDate: '2025-01-08',
-          poNumber: 'PO-CORN-2025-0043',
-          items_preview: ['Vanilla Bean', 'Serious Chocolate', 'Honeycomb Hash', 'Chocolate Orange', 'Orange Choc Chip']
+          id: 'ORD-2025-002',
+          date: '2025-01-15',
+          status: 'shipped',
+          watches: 8,
+          total: 125300.00,
+          dispatchDate: '2025-01-16',
+          estimatedDelivery: '2025-01-22',
+          tenderRef: 'TND-2025-002',
+          trackingNumber: 'DHL-8392847392',
+          watches_preview: ['Rolex Daytona 116500LN', 'Audemars Piguet Royal Oak 15500ST']
+        },
+        {
+          id: 'ORD-2025-004',
+          date: '2025-01-18',
+          status: 'processing',
+          watches: 5,
+          total: 68200.00,
+          estimatedDispatch: '2025-01-23',
+          tenderRef: 'TND-2025-005',
+          watches_preview: ['Cartier Santos WSSA0029', 'Rolex GMT-Master II 126710BLNR']
+        }
+      ],
+      'tenders': [
+        {
+          id: 'TND-2025-003',
+          submittedDate: '2025-01-18',
+          status: 'pending',
+          watches: 15,
+          askingTotal: 245600.00,
+          offeredTotal: 232400.00,
+          acceptedCount: 10,
+          counterCount: 5,
+          watches_preview: ['Cartier Santos', 'Rolex GMT-Master II', 'Patek Philippe Calatrava'],
+          message: 'Awaiting seller response'
+        },
+        {
+          id: 'TND-2025-006',
+          submittedDate: '2025-01-20',
+          status: 'countered',
+          watches: 6,
+          askingTotal: 98500.00,
+          offeredTotal: 92000.00,
+          sellerCounter: 95000.00,
+          acceptedCount: 3,
+          counterCount: 3,
+          watches_preview: ['Omega Seamaster', 'Tudor Black Bay', 'IWC Pilot'],
+          message: 'Seller has countered your offer'
         }
       ],
       get filteredOrders() {
-        let filtered = this.orders;
-
-        // Status filter
-        if (this.filterStatus !== 'all') {
-          filtered = filtered.filter(o => o.status === this.filterStatus);
-        }
-
-        // Timeframe filter
-        if (this.filterTimeframe !== 'all') {
-          const now = new Date();
-          const orderDate = (order) => new Date(order.date);
-
-          filtered = filtered.filter(o => {
-            const diff = now - orderDate(o);
-            const days = diff / (1000 * 60 * 60 * 24);
-
-            if (this.filterTimeframe === '30days') return days <= 30;
-            if (this.filterTimeframe === '90days') return days <= 90;
-            if (this.filterTimeframe === '6months') return days <= 180;
-            return true;
-          });
-        }
-
-        return filtered;
+        return this.orders;
       },
-      getStatusConfig(status) {
+      get filteredTenders() {
+        return this.tenders;
+      },
+      getTenderStatusConfig(status) {
         const configs = {
-          'draft': { label: 'Draft', color: 'gray', icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' },
-          'approved': { label: 'Approved', color: 'green', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
-          'dispatched': { label: 'Dispatched', color: 'blue', icon: 'M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4' },
-          'delivered': { label: 'Delivered', color: 'green', icon: 'M5 13l4 4L19 7' }
+          'pending': { label: 'Pending Review', color: 'amber', bgClass: 'bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300' },
+          'countered': { label: 'Counter Received', color: 'blue', bgClass: 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300' },
+          'accepted': { label: 'Accepted', color: 'green', bgClass: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300' },
+          'rejected': { label: 'Rejected', color: 'red', bgClass: 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300' }
         };
-        return configs[status] || configs.draft;
+        return configs[status] || configs.pending;
+      },
+      getOrderStatusConfig(status) {
+        const configs = {
+          'processing': { label: 'Processing', color: 'amber', bgClass: 'bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300' },
+          'shipped': { label: 'Shipped', color: 'blue', bgClass: 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300' },
+          'delivered': { label: 'Delivered', color: 'green', bgClass: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300' }
+        };
+        return configs[status] || configs.processing;
       },
       formatCurrency(amount) {
-        return '£' + amount.toFixed(2);
+        return '£' + amount.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
       },
       formatDate(dateString) {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
       },
-      reorder(order) {
-        alert('Reordering ' + order.id + '\\n\\nIn a live system, this would:\\n1. Add all items from this order to your cart\\n2. Navigate to the cart page\\n3. Allow you to modify quantities before checkout');
+      acceptCounter(tender) {
+        alert('Accepting seller counter offer for ' + tender.id);
       },
-      viewOrder(order) {
-        alert('Viewing order details for ' + order.id);
+      rejectCounter(tender) {
+        alert('Rejecting seller counter offer for ' + tender.id);
       }
     }"
     x-init="
@@ -169,12 +152,9 @@
       <!-- Left: Logo & Nav -->
       <div class="flex items-center gap-8">
         <!-- Logo -->
-        <a href="buyer-dashboard.html" class="flex items-center gap-3">
-          <img
-            src="src/images/purbeck_logo.png"
-            alt="Purbeck Ice Cream"
-            class="h-auto w-[120px]"
-          />
+        <a href="buyer-dashboard.html" class="flex items-center gap-2">
+          <span class="text-lg font-bold text-gray-900 dark:text-white">Private Label</span>
+          <span class="text-lg font-semibold text-amber-600">Dubai</span>
         </a>
 
         <!-- Main Navigation -->
@@ -191,14 +171,14 @@
             :class="page === 'buyerProducts' ? 'text-amber-600 dark:text-amber-400' : 'text-gray-700 hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400'"
             class="text-sm font-medium transition-colors"
           >
-            Products
+            Browse Stock
           </a>
           <a
-            href="buyer-bulk-upload.html"
-            :class="page === 'buyerBulkUpload' ? 'text-amber-600 dark:text-amber-400' : 'text-gray-700 hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400'"
+            href="buyer-cart.html"
+            :class="page === 'buyerCart' ? 'text-amber-600 dark:text-amber-400' : 'text-gray-700 hover:text-amber-600 dark:text-gray-300 dark:hover:text-amber-400'"
             class="text-sm font-medium transition-colors"
           >
-            Bulk Upload
+            My Selections
           </a>
           <a
             href="buyer-orders.html"
@@ -217,7 +197,7 @@
           <div class="relative">
             <input
               type="search"
-              placeholder="Search products..."
+              placeholder="Search watches..."
               class="h-10 w-64 rounded-lg border border-gray-300 pr-4 pl-10 text-sm focus:border-transparent focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
             />
             <svg
@@ -393,145 +373,132 @@
         <div class="px-4 mx-auto max-w-screen-2xl sm:px-6 lg:px-8">
           <!-- Page Header -->
           <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">My Orders</h1>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Orders & Tenders</h1>
             <p class="mt-2 text-gray-600 dark:text-gray-400">
-              Track and manage your ice cream orders
+              Track your completed orders and ongoing tender negotiations
             </p>
           </div>
 
-          <!-- Filters -->
-          <div class="p-6 mb-6 bg-white border border-gray-200 rounded-2xl dark:bg-gray-800 dark:border-gray-700">
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <div>
-                <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
-                <select x-model="filterStatus" class="w-full px-4 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                  <option value="all">All Statuses</option>
-                  <option value="approved">Approved</option>
-                  <option value="dispatched">Dispatched</option>
-                  <option value="delivered">Delivered</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Timeframe</label>
-                <select x-model="filterTimeframe" class="w-full px-4 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                  <option value="all">All Time</option>
-                  <option value="30days">Last 30 Days</option>
-                  <option value="90days">Last 90 Days</option>
-                  <option value="6months">Last 6 Months</option>
-                </select>
-              </div>
-
-              <div class="lg:col-span-2">
-                <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Search</label>
-                <div class="relative">
-                  <input
-                    type="search"
-                    placeholder="Search by order ID, PO number..."
-                    class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  />
-                  <svg class="absolute w-5 h-5 text-gray-400 left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </div>
-              </div>
+          <!-- Tabs -->
+          <div class="mb-6">
+            <div class="border-b border-gray-200 dark:border-gray-700">
+              <nav class="flex gap-8">
+                <button
+                  @click="activeTab = 'orders'"
+                  class="relative pb-4 text-sm font-semibold transition-colors"
+                  :class="activeTab === 'orders' ? 'text-amber-600 dark:text-amber-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
+                >
+                  My Orders
+                  <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full" :class="activeTab === 'orders' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'" x-text="orders.length"></span>
+                  <span x-show="activeTab === 'orders'" class="absolute bottom-0 left-0 right-0 h-0.5 bg-amber-600 dark:bg-amber-400"></span>
+                </button>
+                <button
+                  @click="activeTab = 'tenders'"
+                  class="relative pb-4 text-sm font-semibold transition-colors"
+                  :class="activeTab === 'tenders' ? 'text-amber-600 dark:text-amber-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
+                >
+                  Ongoing Tenders
+                  <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full" :class="activeTab === 'tenders' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'" x-text="tenders.length"></span>
+                  <span x-show="activeTab === 'tenders'" class="absolute bottom-0 left-0 right-0 h-0.5 bg-amber-600 dark:bg-amber-400"></span>
+                </button>
+              </nav>
             </div>
           </div>
 
-          <!-- Orders List -->
-          <div class="space-y-4">
+          <!-- Orders Tab -->
+          <div x-show="activeTab === 'orders'" class="space-y-4">
             <template x-for="order in filteredOrders" :key="order.id">
               <div class="p-6 bg-white border border-gray-200 rounded-2xl dark:bg-gray-800 dark:border-gray-700 hover:shadow-md transition-shadow">
-                <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
                   <!-- Order Info -->
                   <div class="flex-1">
-                    <div class="flex items-start justify-between mb-3">
+                    <div class="flex items-start justify-between mb-4">
                       <div>
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white" x-text="order.id"></h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white" x-text="order.id"></h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                           Ordered on <span x-text="formatDate(order.date)"></span>
+                          <span class="mx-2">•</span>
+                          From tender <a :href="'#tender-' + order.tenderRef" class="text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300" x-text="order.tenderRef"></a>
                         </p>
                       </div>
 
                       <!-- Status Badge -->
-                      <div>
-                        <span
-                          class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full"
-                          :class="{
-                            'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300': order.status === 'draft',
-                            'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300': order.status === 'approved',
-                            'bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300': order.status === 'dispatched',
-                            'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300': order.status === 'delivered'
-                          }"
-                        >
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getStatusConfig(order.status).icon" />
-                          </svg>
-                          <span x-text="getStatusConfig(order.status).label"></span>
-                        </span>
-                      </div>
+                      <span
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full"
+                        :class="getOrderStatusConfig(order.status).bgClass"
+                        x-text="getOrderStatusConfig(order.status).label"
+                      ></span>
                     </div>
 
                     <!-- Order Details Grid -->
-                    <div class="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-4">
-                      <div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Items</p>
-                        <p class="font-semibold text-gray-900 dark:text-white" x-text="order.items"></p>
+                    <div class="grid grid-cols-2 gap-4 mb-4 lg:grid-cols-4">
+                      <div class="p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Watches</p>
+                        <p class="text-lg font-bold text-gray-900 dark:text-white" x-text="order.watches"></p>
                       </div>
-                      <div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Total</p>
-                        <p class="font-semibold text-gray-900 dark:text-white" x-text="formatCurrency(order.total)"></p>
+                      <div class="p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Total Value</p>
+                        <p class="text-lg font-bold text-gray-900 dark:text-white" x-text="formatCurrency(order.total)"></p>
                       </div>
-                      <div x-show="order.poNumber">
-                        <p class="text-xs text-gray-500 dark:text-gray-400">PO Number</p>
-                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="order.poNumber"></p>
+                      <div class="p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50" x-show="order.dispatchDate">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Dispatched</p>
+                        <p class="text-sm font-semibold text-gray-900 dark:text-white" x-text="formatDate(order.dispatchDate)"></p>
                       </div>
-                      <div x-show="order.dispatchDate">
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Dispatch Date</p>
-                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="formatDate(order.dispatchDate)"></p>
+                      <div class="p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50" x-show="order.trackingNumber">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Tracking</p>
+                        <p class="text-sm font-semibold text-blue-600" x-text="order.trackingNumber"></p>
                       </div>
                     </div>
 
-                    <!-- Items Preview -->
-                    <div class="mt-4">
-                      <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Items</p>
-                      <p class="text-sm text-gray-700 dark:text-gray-300" x-text="order.items_preview.join(', ')"></p>
+                    <!-- Watches Preview -->
+                    <div class="mb-4">
+                      <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Sample Watches:</p>
+                      <div class="flex flex-wrap gap-2">
+                        <template x-for="watch in order.watches_preview" :key="watch">
+                          <span class="px-3 py-1 text-xs font-medium rounded-lg bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300" x-text="watch"></span>
+                        </template>
+                      </div>
                     </div>
 
-                    <!-- Status-specific Info -->
-                    <div x-show="order.status === 'approved'" class="p-3 mt-4 border-l-4 border-green-500 rounded-lg bg-green-50 dark:bg-green-900/20">
-                      <p class="text-sm text-green-800 dark:text-green-300">
-                        Order approved • Will be dispatched on <strong x-text="formatDate(order.dispatchDate)"></strong>
+                    <!-- Status Info Boxes -->
+                    <div x-show="order.status === 'processing'" class="p-4 border-l-4 border-amber-500 rounded-lg bg-amber-50 dark:bg-amber-900/20">
+                      <p class="text-sm font-medium text-amber-800 dark:text-amber-300">
+                        Order is being prepared • Estimated dispatch: <strong x-text="formatDate(order.estimatedDispatch)"></strong>
                       </p>
                     </div>
 
-                    <div x-show="order.status === 'dispatched'" class="p-3 mt-4 border-l-4 border-amber-500 rounded-lg bg-amber-50 dark:bg-amber-900/20">
-                      <p class="text-sm text-amber-800 dark:text-amber-300">
-                        Estimated delivery: <strong x-text="formatDate(order.estimatedDelivery)"></strong>
+                    <div x-show="order.status === 'shipped'" class="p-4 border-l-4 border-blue-500 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+                      <p class="text-sm font-medium text-blue-800 dark:text-blue-300">
+                        In transit • Estimated delivery: <strong x-text="formatDate(order.estimatedDelivery)"></strong>
                       </p>
                     </div>
 
-                    <div x-show="order.status === 'delivered'" class="p-3 mt-4 border-l-4 border-green-500 rounded-lg bg-green-50 dark:bg-green-900/20">
-                      <p class="text-sm text-green-800 dark:text-green-300">
-                        Delivered on <strong x-text="formatDate(order.deliveryDate)"></strong>
-                      </p>
+                    <div x-show="order.status === 'delivered'" class="p-4 border-l-4 border-green-500 rounded-lg bg-green-50 dark:bg-green-900/20">
+                      <div class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        <p class="text-sm font-medium text-green-800 dark:text-green-300">
+                          Delivered on <strong x-text="formatDate(order.deliveryDate)"></strong>
+                        </p>
+                      </div>
                     </div>
                   </div>
 
                   <!-- Actions -->
-                  <div class="flex gap-2 lg:flex-col lg:min-w-[150px]">
-                    <button @click="viewOrder(order)" class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
+                  <div class="flex gap-2 lg:flex-col lg:min-w-[160px]">
+                    <a :href="'buyer-order-detail.html?id=' + order.id" class="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700 transition-colors">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                       </svg>
                       View Details
-                    </button>
-                    <button @click="reorder(order)" x-show="order.status === 'delivered'" class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700">
+                    </a>
+                    <button class="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
-                      Reorder
+                      Invoice
                     </button>
                   </div>
                 </div>
@@ -543,10 +510,145 @@
               <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              <p class="text-lg font-semibold text-gray-900 dark:text-white">No orders found</p>
-              <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Try adjusting your filters or start a new order</p>
+              <p class="text-lg font-semibold text-gray-900 dark:text-white">No orders yet</p>
+              <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Browse stock and submit a tender to get started</p>
               <a href="buyer-products.html" class="inline-block px-6 py-3 mt-6 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700">
-                Browse Products
+                Browse Stock
+              </a>
+            </div>
+          </div>
+
+          <!-- Tenders Tab -->
+          <div x-show="activeTab === 'tenders'" class="space-y-4">
+            <template x-for="tender in filteredTenders" :key="tender.id">
+              <div class="p-6 bg-white border-2 rounded-2xl dark:bg-gray-800 hover:shadow-lg transition-shadow" :class="tender.status === 'countered' ? 'border-blue-300 dark:border-blue-700' : 'border-gray-200 dark:border-gray-700'">
+                <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+                  <!-- Tender Info -->
+                  <div class="flex-1">
+                    <div class="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white" x-text="tender.id"></h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                          Submitted on <span x-text="formatDate(tender.submittedDate)"></span>
+                        </p>
+                      </div>
+
+                      <!-- Status Badge -->
+                      <span
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full"
+                        :class="getTenderStatusConfig(tender.status).bgClass"
+                        x-text="getTenderStatusConfig(tender.status).label"
+                      ></span>
+                    </div>
+
+                    <!-- Tender Stats -->
+                    <div class="grid grid-cols-2 gap-4 mb-4 lg:grid-cols-4">
+                      <div class="p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Total Watches</p>
+                        <p class="text-lg font-bold text-gray-900 dark:text-white" x-text="tender.watches"></p>
+                      </div>
+                      <div class="p-3 rounded-lg bg-green-50 dark:bg-green-900/20">
+                        <p class="text-xs text-green-600 dark:text-green-400 mb-1">Accepted</p>
+                        <p class="text-lg font-bold text-green-700 dark:text-green-300" x-text="tender.acceptedCount"></p>
+                      </div>
+                      <div class="p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20">
+                        <p class="text-xs text-amber-600 dark:text-amber-400 mb-1">Countered</p>
+                        <p class="text-lg font-bold text-amber-700 dark:text-amber-300" x-text="tender.counterCount"></p>
+                      </div>
+                      <div class="p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Your Offer</p>
+                        <p class="text-lg font-bold text-gray-900 dark:text-white" x-text="formatCurrency(tender.offeredTotal)"></p>
+                      </div>
+                    </div>
+
+                    <!-- Pricing Comparison -->
+                    <div class="p-4 mb-4 rounded-lg bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800">
+                      <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Asking Total</span>
+                        <span class="text-base font-medium text-gray-400 line-through" x-text="formatCurrency(tender.askingTotal)"></span>
+                      </div>
+                      <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-medium text-gray-900 dark:text-white">Your Offer</span>
+                        <span class="text-xl font-bold text-amber-600" x-text="formatCurrency(tender.offeredTotal)"></span>
+                      </div>
+                      <div x-show="tender.sellerCounter" class="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
+                        <span class="text-sm font-semibold text-blue-700 dark:text-blue-400">Seller's Counter</span>
+                        <span class="text-xl font-bold text-blue-600" x-text="formatCurrency(tender.sellerCounter)"></span>
+                      </div>
+                    </div>
+
+                    <!-- Watches Preview -->
+                    <div class="mb-4">
+                      <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Sample Watches:</p>
+                      <div class="flex flex-wrap gap-2">
+                        <template x-for="watch in tender.watches_preview" :key="watch">
+                          <span class="px-3 py-1 text-xs font-medium rounded-lg bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300" x-text="watch"></span>
+                        </template>
+                      </div>
+                    </div>
+
+                    <!-- Status Messages -->
+                    <div x-show="tender.status === 'pending'" class="p-4 border-l-4 border-amber-500 rounded-lg bg-amber-50 dark:bg-amber-900/20">
+                      <div class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                        </svg>
+                        <p class="text-sm font-medium text-amber-800 dark:text-amber-300" x-text="tender.message"></p>
+                      </div>
+                    </div>
+
+                    <div x-show="tender.status === 'countered'" class="p-4 border-l-4 border-blue-500 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+                      <div class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                        </svg>
+                        <div>
+                          <p class="text-sm font-semibold text-blue-800 dark:text-blue-300 mb-1" x-text="tender.message"></p>
+                          <p class="text-xs text-blue-700 dark:text-blue-400">Review the counter offer and decide whether to accept or reject</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Actions -->
+                  <div class="flex gap-2 lg:flex-col lg:min-w-[160px]">
+                    <a :href="'buyer-tender-detail.html?id=' + tender.id" class="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700 transition-colors">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                      View Details
+                    </a>
+                    <template x-if="tender.status === 'countered'">
+                      <div class="flex gap-2 lg:flex-col">
+                        <button @click="acceptCounter(tender)" class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                          </svg>
+                          Accept
+                        </button>
+                        <button @click="rejectCounter(tender)" class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                          Reject
+                        </button>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <!-- Empty State -->
+            <div x-show="filteredTenders.length === 0" class="p-12 text-center bg-white border border-gray-200 rounded-2xl dark:bg-gray-800 dark:border-gray-700">
+              <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <p class="text-lg font-semibold text-gray-900 dark:text-white">No ongoing tenders</p>
+              <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Make counter offers in your basket to create tenders</p>
+              <a href="buyer-cart.html" class="inline-block px-6 py-3 mt-6 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700">
+                Go to Basket
               </a>
             </div>
           </div>
@@ -558,7 +660,7 @@
         <div class="px-4 mx-auto max-w-screen-2xl sm:px-6 lg:px-8">
           <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <p class="text-sm text-gray-500 dark:text-gray-400">
-              © 2025 Purbeck Ice Cream. All rights reserved.
+              © 2025 Private Label Dubai. All rights reserved.
             </p>
             <div class="flex items-center gap-6 text-sm">
               <a href="#" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">Help & Support</a>

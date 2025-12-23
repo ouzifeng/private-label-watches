@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Tender Management | Private Label Dubai</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⌚%3C/text%3E%3C/svg%3E">
+  </head>
+  <body
+    x-data="{
+      page: 'tenderManagement',
+      'loaded': true,
+      'darkMode': false,
+      'stickyMenu': false,
+      'sidebarToggle': false,
+      'scrollTop': false,
+      'filter': 'all',
+      'tenders': [
+        {
+          id: 'TND-001',
+          buyer: { name: 'Watchfinder', contact: 'James Richardson' },
+          submittedAt: '2 hours ago',
+          status: 'pending',
+          watchCount: 23,
+          totalValue: 285400,
+          offersCount: 18
+        },
+        {
+          id: 'TND-002',
+          buyer: { name: 'ChronoNext', contact: 'Michael Weber' },
+          submittedAt: '1 hour ago',
+          status: 'partially_accepted',
+          watchCount: 47,
+          totalValue: 512300,
+          offersCount: 31
+        },
+        {
+          id: 'TND-003',
+          buyer: { name: 'Chrono24 DE', contact: 'Hans Mueller' },
+          submittedAt: '30 mins ago',
+          status: 'pending',
+          watchCount: 12,
+          totalValue: 156700,
+          offersCount: 8
+        },
+        {
+          id: 'TND-004',
+          buyer: { name: 'Bobs Watches', contact: 'Robert Chen' },
+          submittedAt: '1 day ago',
+          status: 'rejected',
+          watchCount: 8,
+          totalValue: 94200,
+          offersCount: 5
+        },
+        {
+          id: 'TND-005',
+          buyer: { name: 'Luxury Bazaar', contact: 'David Martinez' },
+          submittedAt: '5 hours ago',
+          status: 'pending',
+          watchCount: 34,
+          totalValue: 428900,
+          offersCount: 22
+        }
+      ],
+      get filteredTenders() {
+        if (this.filter === 'all') return this.tenders;
+        return this.tenders.filter(t => t.status === this.filter);
+      },
+      get pendingCount() {
+        return this.tenders.filter(t => t.status === 'pending').length;
+      },
+      get acceptedCount() {
+        return this.tenders.filter(t => t.status === 'accepted' || t.status === 'partially_accepted').length;
+      },
+      get counteredCount() {
+        return this.tenders.filter(t => t.status === 'countered').length;
+      },
+      get rejectedCount() {
+        return this.tenders.filter(t => t.status === 'rejected').length;
+      },
+      get totalPendingValue() {
+        return this.tenders
+          .filter(t => t.status === 'pending')
+          .reduce((sum, t) => sum + t.totalValue, 0);
+      },
+      formatPrice(price) {
+        return '£' + price.toLocaleString();
+      },
+      getMarginClass(margin) {
+        if (margin < 0) return 'text-red-600 bg-red-50 dark:bg-red-900/20 dark:text-red-400';
+        if (margin < 10) return 'text-amber-600 bg-amber-50 dark:bg-amber-900/20 dark:text-amber-400';
+        return 'text-green-600 bg-green-50 dark:bg-green-900/20 dark:text-green-400';
+      },
+      getStatusClass(status) {
+        switch(status) {
+          case 'accepted': return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
+          case 'partially_accepted': return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
+          case 'pending': return 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400';
+          case 'countered': return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+          case 'rejected': return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
+          default: return 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400';
+        }
+      }
+    }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-x-hidden overflow-y-auto"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="mx-auto max-w-(--breakpoint-2xl) p-4 md:p-6">
+            <!-- Breadcrumb Start -->
+            <div x-data="{ pageName: `Tender Management`}">
+              <include src="./partials/breadcrumb.html" />
+            </div>
+            <!-- Breadcrumb End -->
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 lg:grid-cols-4">
+              <div class="p-5 bg-white border border-gray-200 rounded-2xl dark:border-gray-800 dark:bg-white/[0.03]">
+                <div class="flex items-center gap-3">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-900/30">
+                    <svg class="h-6 w-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Pending Tenders</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="pendingCount"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="p-5 bg-white border border-gray-200 rounded-2xl dark:border-gray-800 dark:bg-white/[0.03]">
+                <div class="flex items-center gap-3">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-green-100 dark:bg-green-900/30">
+                    <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Accepted</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="acceptedCount"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="p-5 bg-white border border-gray-200 rounded-2xl dark:border-gray-800 dark:bg-white/[0.03]">
+                <div class="flex items-center gap-3">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 dark:bg-blue-900/30">
+                    <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Countered</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="counteredCount"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="p-5 bg-white border border-gray-200 rounded-2xl dark:border-gray-800 dark:bg-white/[0.03]">
+                <div class="flex items-center gap-3">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-900/30">
+                    <svg class="h-6 w-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Pending Value</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="formatPrice(totalPendingValue)"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tenders Table -->
+            <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+              <!-- Header -->
+              <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800 sm:px-6 sm:py-5">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+                      All Tenders
+                    </h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                      Manage counter offers from buyers
+                    </p>
+                  </div>
+
+                  <!-- Filter Tabs -->
+                  <div class="flex gap-2">
+                    <button
+                      @click="filter = 'all'"
+                      class="px-4 py-2 text-sm font-medium rounded-lg transition-colors"
+                      :class="filter === 'all' ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'"
+                    >
+                      All
+                    </button>
+                    <button
+                      @click="filter = 'pending'"
+                      class="px-4 py-2 text-sm font-medium rounded-lg transition-colors"
+                      :class="filter === 'pending' ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'"
+                    >
+                      Pending
+                    </button>
+                    <button
+                      @click="filter = 'countered'"
+                      class="px-4 py-2 text-sm font-medium rounded-lg transition-colors"
+                      :class="filter === 'countered' ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'"
+                    >
+                      Countered
+                    </button>
+                    <button
+                      @click="filter = 'accepted'"
+                      class="px-4 py-2 text-sm font-medium rounded-lg transition-colors"
+                      :class="filter === 'accepted' ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'"
+                    >
+                      Accepted
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Table -->
+              <div class="overflow-x-auto">
+                <table class="w-full">
+                  <thead class="bg-gray-50 dark:bg-gray-800/50">
+                    <tr>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Tender ID</th>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Buyer</th>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Watches</th>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Total Value</th>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Offers</th>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Status</th>
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"></th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                    <template x-for="tender in filteredTenders" :key="tender.id">
+                      <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30">
+                        <td class="px-5 py-4">
+                          <a href="tender-detail.html" class="font-semibold text-amber-600 hover:text-amber-700 dark:text-amber-400" x-text="tender.id"></a>
+                          <p class="text-xs text-gray-500 dark:text-gray-400" x-text="tender.submittedAt"></p>
+                        </td>
+                        <td class="px-5 py-4">
+                          <p class="font-medium text-gray-800 dark:text-white" x-text="tender.buyer.name"></p>
+                          <p class="text-xs text-gray-500 dark:text-gray-400" x-text="tender.buyer.contact"></p>
+                        </td>
+                        <td class="px-5 py-4">
+                          <p class="font-medium text-gray-900 dark:text-white" x-text="tender.watchCount + ' watches'"></p>
+                        </td>
+                        <td class="px-5 py-4">
+                          <p class="font-semibold text-gray-900 dark:text-white" x-text="formatPrice(tender.totalValue)"></p>
+                        </td>
+                        <td class="px-5 py-4">
+                          <p class="text-sm text-gray-700 dark:text-gray-300" x-text="tender.offersCount + ' offers'"></p>
+                        </td>
+                        <td class="px-5 py-4">
+                          <span
+                            class="px-2.5 py-1 text-xs font-medium rounded-full capitalize"
+                            :class="getStatusClass(tender.status)"
+                            x-text="tender.status.replace('_', ' ')"
+                          ></span>
+                        </td>
+                        <td class="px-5 py-4 text-right">
+                          <a href="tender-detail.html" class="inline-flex items-center gap-1 text-sm font-medium text-amber-600 hover:text-amber-700 dark:text-amber-400">
+                            View
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                          </a>
+                        </td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Empty State -->
+              <div x-show="filteredTenders.length === 0" class="p-12 text-center">
+                <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                <p class="text-lg font-semibold text-gray-900 dark:text-white">No tenders found</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">There are no tenders matching this filter.</p>
+              </div>
+            </div>
+
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+  </body>
+</html>

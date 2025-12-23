@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>My Basket | Private Label Dubai</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⌚%3C/text%3E%3C/svg%3E">
+  </head>
+  <body
+    x-data="{
+      page: 'buyerCart',
+      'loaded': true,
+      'darkMode': false,
+      'showCheckoutModal': false,
+      'showTenderModal': false,
+      'selectedCurrency': 'GBP',
+      'user': {
+        name: 'James Richardson',
+        email: 'james@watchfinder.co.uk',
+        company: 'Watchfinder',
+        role: 'Buyer'
+      },
+      'basket': [
+        {
+          id: 1,
+          brand: 'Rolex',
+          model: 'Submariner Date',
+          reference: '126610LN',
+          serial: 'P8K9L2M3',
+          year: 2023,
+          dialColor: 'Black',
+          condition: 'Unworn',
+          box: true,
+          papers: true,
+          priceGBP: 12850,
+          priceEUR: 15050,
+          counterOffer: null,
+          image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop'
+        },
+        {
+          id: 2,
+          brand: 'Rolex',
+          model: 'Daytona',
+          reference: '116500LN',
+          serial: 'N5M2K8P9',
+          year: 2022,
+          dialColor: 'White',
+          condition: 'Unworn',
+          box: true,
+          papers: true,
+          priceGBP: 28500,
+          priceEUR: 33350,
+          counterOffer: null,
+          image: 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=200&h=200&fit=crop'
+        },
+        {
+          id: 3,
+          brand: 'Omega',
+          model: 'Speedmaster Moonwatch',
+          reference: '310.30.42.50',
+          serial: 'R2T5K9L3',
+          year: 2023,
+          dialColor: 'Black',
+          condition: 'Excellent',
+          box: true,
+          papers: true,
+          priceGBP: 6450,
+          priceEUR: 7550,
+          counterOffer: null,
+          image: 'https://images.unsplash.com/photo-1548169874-53e85f753f1e?w=200&h=200&fit=crop'
+        },
+        {
+          id: 4,
+          brand: 'Patek Philippe',
+          model: 'Nautilus',
+          reference: '5711/1A',
+          serial: 'K9P3M5T2',
+          year: 2021,
+          dialColor: 'Blue',
+          condition: 'Excellent',
+          box: true,
+          papers: true,
+          priceGBP: 85000,
+          priceEUR: 99400,
+          counterOffer: null,
+          image: 'https://images.unsplash.com/photo-1587836374568-6c9f8034d318?w=200&h=200&fit=crop'
+        },
+        {
+          id: 5,
+          brand: 'Audemars Piguet',
+          model: 'Royal Oak',
+          reference: '15500ST',
+          serial: 'T3L8K2P9',
+          year: 2022,
+          dialColor: 'Blue',
+          condition: 'Unworn',
+          box: true,
+          papers: true,
+          priceGBP: 38500,
+          priceEUR: 45000,
+          counterOffer: null,
+          image: 'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=200&h=200&fit=crop'
+        }
+      ],
+      get cartCount() {
+        return this.basket.length;
+      },
+      get hasAnyCounters() {
+        return this.basket.some(w => w.counterOffer && parseFloat(w.counterOffer) > 0);
+      },
+      get askingPrice() {
+        return this.selectedCurrency === 'GBP' ? 'priceGBP' : 'priceEUR';
+      },
+      get basketTotal() {
+        return this.basket.reduce((sum, w) => {
+          const price = this.selectedCurrency === 'GBP' ? w.priceGBP : w.priceEUR;
+          const offer = (w.counterOffer && parseFloat(w.counterOffer) > 0) ? parseFloat(w.counterOffer) : price;
+          return sum + offer;
+        }, 0);
+      },
+      get askingTotal() {
+        return this.basket.reduce((sum, w) => {
+          const price = this.selectedCurrency === 'GBP' ? w.priceGBP : w.priceEUR;
+          return sum + price;
+        }, 0);
+      },
+      get counterTotal() {
+        return this.basket.reduce((sum, w) => {
+          const counter = (w.counterOffer && parseFloat(w.counterOffer) > 0) ? parseFloat(w.counterOffer) : 0;
+          return sum + counter;
+        }, 0);
+      },
+      get acceptedCount() {
+        return this.basket.filter(w => !w.counterOffer || parseFloat(w.counterOffer) === 0).length;
+      },
+      get counteredCount() {
+        return this.basket.filter(w => w.counterOffer && parseFloat(w.counterOffer) > 0).length;
+      },
+      removeFromBasket(index) {
+        this.basket.splice(index, 1);
+      },
+      clearCounterOffer(watch) {
+        watch.counterOffer = null;
+      },
+      submitBasket() {
+        if (this.hasAnyCounters) {
+          this.showTenderModal = true;
+        } else {
+          this.showCheckoutModal = true;
+        }
+      },
+      confirmCheckout() {
+        // Go to checkout
+        this.showCheckoutModal = false;
+        window.location.href = 'buyer-checkout.html';
+      },
+      confirmTender() {
+        // Submit tender for review
+        this.showTenderModal = false;
+        window.location.href = 'buyer-orders.html';
+      },
+      formatPrice(price, currency = null) {
+        currency = currency || this.selectedCurrency;
+        const symbol = currency === 'EUR' ? '€' : '£';
+        return symbol + price.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      }
+    }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Container ===== -->
+    <div class="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+      <!-- ===== Top Navigation Bar ===== -->
+      <include src="./partials/buyer-nav.html"></include>
+
+      <!-- ===== Main Content ===== -->
+      <main class="flex-1 py-8">
+        <div class="px-4 mx-auto max-w-screen-2xl sm:px-6 lg:px-8">
+          <!-- Page Header -->
+          <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">My Basket</h1>
+            <p class="mt-2 text-gray-600 dark:text-gray-400">
+              Review your selections. Accept prices or make counter offers.
+            </p>
+          </div>
+
+          <!-- Empty State -->
+          <div x-show="basket.length === 0" class="p-12 text-center bg-white border border-gray-200 rounded-2xl dark:bg-gray-800 dark:border-gray-700">
+            <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+            <p class="text-lg font-semibold text-gray-900 dark:text-white">Your basket is empty</p>
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Browse our stock and add watches to your basket</p>
+            <a href="buyer-products.html" class="inline-block px-6 py-3 mt-6 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700">
+              Browse Stock
+            </a>
+          </div>
+
+          <!-- Basket Table -->
+          <div x-show="basket.length > 0" class="bg-white border border-gray-200 rounded-2xl dark:bg-gray-800 dark:border-gray-700 overflow-hidden mb-8">
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h2 class="text-lg font-bold text-gray-900 dark:text-white">
+                    <span x-text="basket.length"></span> Watches in Basket
+                  </h2>
+                  <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    Accept prices to checkout, or counter offer individual watches to create a tender
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Watch</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Reference</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Year</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Dial</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Condition</th>
+                    <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Asking Price</th>
+                    <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Your Offer</th>
+                    <th class="px-6 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider w-16"></th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                  <template x-for="(watch, index) in basket" :key="watch.id">
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors">
+                      <!-- Watch -->
+                      <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                          <img :src="watch.image" :alt="watch.model" class="w-12 h-12 rounded-lg object-cover bg-gray-100 flex-shrink-0" />
+                          <div>
+                            <p class="font-semibold text-gray-900 dark:text-white" x-text="watch.brand"></p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400" x-text="watch.model"></p>
+                          </div>
+                        </div>
+                      </td>
+
+                      <!-- Reference -->
+                      <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white" x-text="watch.reference"></td>
+
+                      <!-- Year -->
+                      <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400" x-text="watch.year"></td>
+
+                      <!-- Dial -->
+                      <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400" x-text="watch.dialColor"></td>
+
+                      <!-- Condition -->
+                      <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400" x-text="watch.condition"></td>
+
+                      <!-- Asking Price -->
+                      <td class="px-6 py-4 text-right">
+                        <span class="text-base font-bold text-gray-900 dark:text-white" x-text="formatPrice(watch.priceGBP)"></span>
+                      </td>
+
+                      <!-- Your Offer -->
+                      <td class="px-6 py-4">
+                        <div class="flex items-center justify-end gap-2">
+                          <div class="relative w-32">
+                            <span class="absolute left-2 top-1/2 -translate-y-1/2 text-xs text-gray-500 dark:text-gray-400">£</span>
+                            <input
+                              type="number"
+                              x-model="watch.counterOffer"
+                              :placeholder="watch.priceGBP"
+                              min="0"
+                              step="50"
+                              class="w-full h-8 pl-5 pr-2 text-sm font-semibold text-amber-600 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                            />
+                          </div>
+                          <button
+                            x-show="watch.counterOffer && watch.counterOffer > 0"
+                            @click="clearCounterOffer(watch)"
+                            class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                            title="Clear counter offer"
+                          >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+
+                      <!-- Status -->
+                      <td class="px-6 py-4 text-center">
+                        <template x-if="!watch.counterOffer || parseFloat(watch.counterOffer) === 0">
+                          <span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            Accept
+                          </span>
+                        </template>
+                        <template x-if="watch.counterOffer && parseFloat(watch.counterOffer) > 0">
+                          <span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                            Counter
+                          </span>
+                        </template>
+                      </td>
+
+                      <!-- Remove -->
+                      <td class="px-6 py-4 text-center">
+                        <button @click="removeFromBasket(index)" class="text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors" title="Remove from basket">
+                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Purchase Summary Section -->
+          <div x-show="basket.length > 0">
+            <div class="p-8 bg-white border border-gray-200 rounded-2xl dark:bg-gray-800 dark:border-gray-700">
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Watch Count -->
+                <div class="p-6 rounded-xl bg-gray-50 dark:bg-gray-900/50">
+                  <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Total Watches</p>
+                  <p class="text-3xl font-bold text-gray-900 dark:text-white" x-text="basket.length"></p>
+                </div>
+
+                <!-- Accepted Count -->
+                <div class="p-6 rounded-xl bg-green-50 dark:bg-green-900/20">
+                  <p class="text-xs font-medium text-green-600 dark:text-green-400 mb-2">Accepted at Asking</p>
+                  <p class="text-3xl font-bold text-green-700 dark:text-green-300" x-text="acceptedCount"></p>
+                </div>
+
+                <!-- Counter Count -->
+                <div class="p-6 rounded-xl bg-amber-50 dark:bg-amber-900/20">
+                  <p class="text-xs font-medium text-amber-600 dark:text-amber-400 mb-2">Counter Offers</p>
+                  <p class="text-3xl font-bold text-amber-700 dark:text-amber-300" x-text="counteredCount"></p>
+                </div>
+
+                <!-- Total -->
+                <div class="p-6 rounded-xl" :class="hasAnyCounters ? 'bg-amber-50 dark:bg-amber-900/20' : 'bg-green-50 dark:bg-green-900/20'">
+                  <p class="text-xs font-medium mb-2" :class="hasAnyCounters ? 'text-amber-600 dark:text-amber-400' : 'text-green-600 dark:text-green-400'">Your Total</p>
+                  <p class="text-3xl font-bold" :class="hasAnyCounters ? 'text-amber-700 dark:text-amber-300' : 'text-green-700 dark:text-green-300'" x-text="formatPrice(basketTotal)"></p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    was <span class="line-through" x-text="formatPrice(askingTotal)"></span>
+                  </p>
+                </div>
+              </div>
+
+              <!-- Info Box & Actions -->
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Info Box -->
+                <div class="p-6 rounded-xl" :class="hasAnyCounters ? 'bg-amber-50 dark:bg-amber-900/20' : 'bg-green-50 dark:bg-green-900/20'">
+                  <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 mt-0.5 flex-shrink-0" :class="hasAnyCounters ? 'text-amber-600' : 'text-green-600'" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                    </svg>
+                    <div>
+                      <template x-if="!hasAnyCounters">
+                        <div>
+                          <p class="text-base font-semibold text-green-800 dark:text-green-400 mb-1">Ready to checkout</p>
+                          <p class="text-sm text-green-700 dark:text-green-500">All watches accepted at asking price. Instant order processing.</p>
+                        </div>
+                      </template>
+                      <template x-if="hasAnyCounters">
+                        <div>
+                          <p class="text-base font-semibold text-amber-800 dark:text-amber-400 mb-1">Tender requires approval</p>
+                          <p class="text-sm text-amber-700 dark:text-amber-500">Counter offers will be submitted to Private Label Dubai for review. Response within 24 hours.</p>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col gap-3">
+                  <button
+                    @click="submitBasket()"
+                    class="flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold text-white rounded-xl transition-all transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
+                    :class="hasAnyCounters ? 'bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800' : 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800'"
+                  >
+                    <template x-if="!hasAnyCounters">
+                      <span>Checkout Now</span>
+                    </template>
+                    <template x-if="hasAnyCounters">
+                      <span>Submit Tender for Review</span>
+                    </template>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+
+                  <a href="buyer-products.html" class="flex items-center justify-center gap-2 px-8 py-3 text-sm font-medium text-gray-700 border-2 border-gray-300 rounded-xl hover:bg-gray-50 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors">
+                    Browse More Stock
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- ===== Footer ===== -->
+      <footer class="py-6 mt-8 bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+        <div class="px-4 mx-auto max-w-screen-2xl sm:px-6 lg:px-8">
+          <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              © 2025 Private Label Dubai. All rights reserved.
+            </p>
+            <div class="flex items-center gap-6 text-sm">
+              <a href="#" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">Help & Support</a>
+              <a href="#" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">Terms & Conditions</a>
+              <a href="#" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">Privacy Policy</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- ===== Page Container End ===== -->
+
+    <!-- ===== Checkout Modal (All Accepted) ===== -->
+    <div
+      x-show="showCheckoutModal"
+      x-cloak
+      class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 backdrop-blur-sm"
+      @click.self="showCheckoutModal = false"
+    >
+      <div
+        x-show="showCheckoutModal"
+        x-transition
+        class="relative w-full max-w-lg p-8 mx-4 bg-white rounded-2xl shadow-2xl dark:bg-gray-800"
+      >
+        <!-- Close Button -->
+        <button
+          @click="showCheckoutModal = false"
+          class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <!-- Icon -->
+        <div class="flex justify-center mb-6">
+          <div class="flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30">
+            <svg class="w-10 h-10 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Title -->
+        <h2 class="mb-3 text-2xl font-bold text-center text-gray-900 dark:text-white">
+          Confirm Instant Checkout
+        </h2>
+        <p class="mb-6 text-center text-gray-600 dark:text-gray-400">
+          All watches are being purchased at asking price
+        </p>
+
+        <!-- Order Summary -->
+        <div class="p-5 mb-6 rounded-xl bg-gray-50 dark:bg-gray-900/50">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Watches</span>
+            <span class="text-lg font-bold text-gray-900 dark:text-white" x-text="basket.length"></span>
+          </div>
+          <div class="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
+            <span class="text-base font-semibold text-gray-900 dark:text-white">Total Amount</span>
+            <span class="text-2xl font-bold text-green-600" x-text="formatPrice(askingTotal)"></span>
+          </div>
+        </div>
+
+        <!-- Watch List Preview -->
+        <div class="p-4 mb-6 rounded-lg bg-green-50 dark:bg-green-900/20">
+          <p class="text-sm font-medium text-green-800 dark:text-green-400 mb-2">Watches in this order:</p>
+          <div class="space-y-1 max-h-32 overflow-y-auto">
+            <template x-for="watch in basket" :key="watch.id">
+              <p class="text-xs text-green-700 dark:text-green-500" x-text="watch.brand + ' ' + watch.model + ' (' + watch.reference + ')'"></p>
+            </template>
+          </div>
+        </div>
+
+        <div class="p-4 mb-6 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+          <div class="flex items-start gap-2">
+            <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+            </svg>
+            <div>
+              <p class="text-sm font-medium text-blue-800 dark:text-blue-400">Instant Order</p>
+              <p class="text-xs text-blue-700 dark:text-blue-500 mt-1">
+                Your order will be processed immediately and you'll receive a confirmation email with next steps.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-3">
+          <button
+            @click="showCheckoutModal = false"
+            class="flex-1 px-6 py-3 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700"
+          >
+            Cancel
+          </button>
+          <button
+            @click="confirmCheckout()"
+            class="flex-1 px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-green-600 to-green-700 rounded-lg hover:from-green-700 hover:to-green-800 shadow-lg"
+          >
+            Confirm & Checkout
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Tender Modal (Counter Offers) ===== -->
+    <div
+      x-show="showTenderModal"
+      x-cloak
+      class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 backdrop-blur-sm"
+      @click.self="showTenderModal = false"
+    >
+      <div
+        x-show="showTenderModal"
+        x-transition
+        class="relative w-full max-w-2xl p-8 mx-4 bg-white rounded-2xl shadow-2xl dark:bg-gray-800 max-h-[90vh] overflow-y-auto"
+      >
+        <!-- Close Button -->
+        <button
+          @click="showTenderModal = false"
+          class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <!-- Icon -->
+        <div class="flex justify-center mb-6">
+          <div class="flex items-center justify-center w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-900/30">
+            <svg class="w-10 h-10 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Title -->
+        <h2 class="mb-3 text-2xl font-bold text-center text-gray-900 dark:text-white">
+          Submit Tender for Review
+        </h2>
+        <p class="mb-6 text-center text-gray-600 dark:text-gray-400">
+          Your counter offers will be sent to the seller for approval
+        </p>
+
+        <!-- Summary Stats -->
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="p-4 rounded-xl bg-green-50 dark:bg-green-900/20">
+            <p class="text-xs font-medium text-green-600 dark:text-green-400 mb-1">Accepted at Asking</p>
+            <p class="text-2xl font-bold text-green-700 dark:text-green-300" x-text="acceptedCount"></p>
+          </div>
+          <div class="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20">
+            <p class="text-xs font-medium text-amber-600 dark:text-amber-400 mb-1">Counter Offers</p>
+            <p class="text-2xl font-bold text-amber-700 dark:text-amber-300" x-text="counteredCount"></p>
+          </div>
+        </div>
+
+        <!-- Watches with Counter Offers -->
+        <div class="mb-6">
+          <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Counter Offers:</h3>
+          <div class="space-y-3 max-h-64 overflow-y-auto">
+            <template x-for="watch in basket.filter(w => w.counterOffer && parseFloat(w.counterOffer) > 0)" :key="watch.id">
+              <div class="p-4 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
+                <div class="flex items-center justify-between mb-2">
+                  <p class="text-sm font-semibold text-gray-900 dark:text-white" x-text="watch.brand + ' ' + watch.model"></p>
+                  <span class="px-2 py-0.5 text-xs font-medium rounded bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-400">Counter</span>
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-2" x-text="'Ref: ' + watch.reference"></p>
+                <div class="flex items-center gap-4">
+                  <div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Asking</p>
+                    <p class="text-sm font-medium text-gray-400 line-through" x-text="formatPrice(watch.priceGBP)"></p>
+                  </div>
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                  <div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Your Offer</p>
+                    <p class="text-sm font-bold text-amber-600" x-text="formatPrice(watch.counterOffer)"></p>
+                  </div>
+                  <div class="ml-auto">
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Saving</p>
+                    <p class="text-sm font-bold text-green-600" x-text="formatPrice(watch.priceGBP - watch.counterOffer)"></p>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- Watches Accepted at Asking -->
+        <div class="mb-6" x-show="acceptedCount > 0">
+          <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Accepted at Asking Price:</h3>
+          <div class="p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
+            <div class="space-y-1 max-h-24 overflow-y-auto">
+              <template x-for="watch in basket.filter(w => !w.counterOffer || parseFloat(w.counterOffer) === 0)" :key="watch.id">
+                <p class="text-xs text-green-700 dark:text-green-500" x-text="watch.brand + ' ' + watch.model + ' - ' + formatPrice(watch.priceGBP)"></p>
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total -->
+        <div class="p-5 mb-6 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm text-gray-600 dark:text-gray-400">Original Total</span>
+            <span class="text-lg font-medium text-gray-400 line-through" x-text="formatPrice(askingTotal)"></span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-base font-semibold text-gray-900 dark:text-white">Your Tender Total</span>
+            <span class="text-2xl font-bold text-amber-600" x-text="formatPrice(basketTotal)"></span>
+          </div>
+          <div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+            <p class="text-sm text-center text-green-600 font-medium">
+              Potential Saving: <span x-text="formatPrice(askingTotal - basketTotal)"></span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Info Box -->
+        <div class="p-4 mb-6 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+          <div class="flex items-start gap-2">
+            <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+            </svg>
+            <div>
+              <p class="text-sm font-medium text-blue-800 dark:text-blue-400">What happens next?</p>
+              <ul class="mt-2 space-y-1 text-xs text-blue-700 dark:text-blue-500">
+                <li>• Private Label Dubai will review your counter offers within 24 hours</li>
+                <li>• You'll receive an email notification when the seller responds</li>
+                <li>• Accepted watches at asking price will be secured immediately</li>
+                <li>• The seller may accept, reject, or counter your offers</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-3">
+          <button
+            @click="showTenderModal = false"
+            class="flex-1 px-6 py-3 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700"
+          >
+            Cancel
+          </button>
+          <button
+            @click="confirmTender()"
+            class="flex-1 px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-amber-600 to-amber-700 rounded-lg hover:from-amber-700 hover:to-amber-800 shadow-lg"
+          >
+            Submit Tender
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Buyer Details | Private Label Dubai</title>
+  </head>
+  <body
+    x-data="{
+      page: 'customerConfig',
+      'loaded': true,
+      'darkMode': false,
+      'stickyMenu': false,
+      'sidebarToggle': false,
+      'scrollTop': false,
+
+      buyerName: new URLSearchParams(window.location.search).get('name') || 'Watchfinder',
+      editing: false,
+      successMessage: '',
+
+      buyers: {
+        'Watchfinder': {
+          id: 'BYR001',
+          name: 'Watchfinder',
+          type: 'Pre-Owned Dealer',
+          companyName: 'Watchfinder & Co. Ltd',
+          address: '25 Berkeley Square, London, W1J 6HE',
+          country: 'United Kingdom',
+          contactName: 'James Richardson',
+          contactEmail: 'purchasing@watchfinder.co.uk',
+          contactPhone: '+44 20 7927 5753',
+          paymentTerms: '7 days',
+          creditLimit: 500000,
+          currency: 'GBP',
+          status: 'active',
+          lastOrder: '2025-01-20',
+          totalOrders: 47,
+          totalSpend: 2450000,
+          notes: 'Major UK pre-owned dealer. Focus on Rolex and Patek Philippe. High volume buyer with quick turnaround.',
+          preferences: 'Prefers unworn and excellent condition pieces. Strong demand for sports models.'
+        },
+        'ChronoNext': {
+          id: 'BYR002',
+          name: 'ChronoNext',
+          type: 'Online Platform',
+          companyName: 'ChronoNext GmbH',
+          address: 'Deutz-Mülheimer Straße 183, Cologne, Germany',
+          country: 'Germany',
+          contactName: 'Ludwig Weber',
+          contactEmail: 'trade@chrononext.com',
+          contactPhone: '+49 221 67788990',
+          paymentTerms: '14 days',
+          creditLimit: 750000,
+          currency: 'EUR',
+          status: 'active',
+          lastOrder: '2025-01-19',
+          totalOrders: 89,
+          totalSpend: 4560000,
+          notes: 'European online marketplace. Strong demand for sports models and vintage pieces.',
+          preferences: 'Interested in full set (box & papers). Regular monthly orders.'
+        },
+        'Bobs Watches': {
+          id: 'BYR003',
+          name: 'Bobs Watches',
+          type: 'Pre-Owned Dealer',
+          companyName: 'Bobs Watches LLC',
+          address: '1030 S Coast Hwy, Laguna Beach, CA 92651',
+          country: 'United States',
+          contactName: 'Robert Chen',
+          contactEmail: 'wholesale@bobswatches.com',
+          contactPhone: '+1 949 494 2583',
+          paymentTerms: '7 days',
+          creditLimit: 1000000,
+          currency: 'USD',
+          status: 'active',
+          lastOrder: '2025-01-18',
+          totalOrders: 156,
+          totalSpend: 6780000,
+          notes: 'US market leader. Rolex specialist. Quick payment, high volume orders.',
+          preferences: 'Rolex heavy focus. Fast wire transfers. Prefer complete sets with warranty cards.'
+        }
+      },
+
+      get currentBuyer() {
+        return this.buyers[this.buyerName] || this.buyers['Watchfinder'];
+      },
+
+      formatCurrency(amount) {
+        const curr = this.currentBuyer.currency || 'GBP';
+        const symbol = curr === 'GBP' ? '£' : curr === 'EUR' ? '€' : '$';
+        return symbol + amount.toLocaleString('en-GB', { minimumFractionDigits: 0 });
+      },
+
+      formatDate(dateStr) {
+        return new Date(dateStr).toLocaleDateString('en-GB', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      },
+
+      saveChanges() {
+        this.editing = false;
+        this.showSuccess('Buyer details updated successfully');
+      },
+
+      showSuccess(message) {
+        this.successMessage = message;
+        setTimeout(() => this.successMessage = '', 3000);
+      }
+    }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="p-4 mx-auto max-w-screen-2xl md:p-6 2xl:p-10">
+
+            <!-- Breadcrumb -->
+            <div class="mb-6 flex items-center gap-3">
+              <a href="user-management.html" class="text-sm text-gray-600 hover:text-amber-600 dark:text-gray-400 dark:hover:text-amber-500">
+                ← Back to Buyers
+              </a>
+            </div>
+
+            <!-- Success Message -->
+            <template x-if="successMessage">
+              <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2 text-green-800 dark:bg-green-900/20 dark:border-green-800 dark:text-green-400">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span x-text="successMessage"></span>
+              </div>
+            </template>
+
+            <!-- Page Header -->
+            <div class="mb-6 flex items-center justify-between">
+              <div>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white" x-text="currentBuyer.name"></h1>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  <span x-text="currentBuyer.type"></span> • <span x-text="currentBuyer.id"></span>
+                </p>
+              </div>
+
+              <div class="flex gap-3">
+                <template x-if="!editing">
+                  <button @click="editing = true" class="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 font-medium">
+                    Edit Details
+                  </button>
+                </template>
+                <template x-if="editing">
+                  <div class="flex gap-2">
+                    <button @click="editing = false" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
+                      Cancel
+                    </button>
+                    <button @click="saveChanges()" class="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700">
+                      Save Changes
+                    </button>
+                  </div>
+                </template>
+              </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div class="bg-white dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
+                <p class="text-sm text-gray-600 dark:text-gray-400">Total Orders</p>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1" x-text="currentBuyer.totalOrders"></p>
+              </div>
+
+              <div class="bg-white dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
+                <p class="text-sm text-gray-600 dark:text-gray-400">Total Spend</p>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1" x-text="formatCurrency(currentBuyer.totalSpend)"></p>
+              </div>
+
+              <div class="bg-white dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
+                <p class="text-sm text-gray-600 dark:text-gray-400">Last Order</p>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1" x-text="formatDate(currentBuyer.lastOrder)"></p>
+              </div>
+
+              <div class="bg-white dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
+                <p class="text-sm text-gray-600 dark:text-gray-400">Status</p>
+                <p class="text-2xl font-bold capitalize mt-1"
+                   :class="currentBuyer.status === 'active' ? 'text-green-600' : 'text-red-600'"
+                   x-text="currentBuyer.status"></p>
+              </div>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+              <!-- Company Information -->
+              <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Company Information</h2>
+
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Company Name</label>
+                    <template x-if="!editing">
+                      <p class="text-gray-900 dark:text-white" x-text="currentBuyer.companyName"></p>
+                    </template>
+                    <template x-if="editing">
+                      <input
+                        type="text"
+                        x-model="currentBuyer.companyName"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      />
+                    </template>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Business Type</label>
+                    <template x-if="!editing">
+                      <p class="text-gray-900 dark:text-white" x-text="currentBuyer.type"></p>
+                    </template>
+                    <template x-if="editing">
+                      <select
+                        x-model="currentBuyer.type"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      >
+                        <option value="Pre-Owned Dealer">Pre-Owned Dealer</option>
+                        <option value="Online Platform">Online Platform</option>
+                        <option value="Authorized Dealer">Authorized Dealer</option>
+                        <option value="Boutique Retailer">Boutique Retailer</option>
+                        <option value="Auction House">Auction House</option>
+                        <option value="Watch Collector">Watch Collector</option>
+                      </select>
+                    </template>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Address</label>
+                    <template x-if="!editing">
+                      <p class="text-gray-900 dark:text-white" x-text="currentBuyer.address"></p>
+                    </template>
+                    <template x-if="editing">
+                      <textarea
+                        x-model="currentBuyer.address"
+                        rows="2"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      ></textarea>
+                    </template>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Country</label>
+                    <template x-if="!editing">
+                      <p class="text-gray-900 dark:text-white" x-text="currentBuyer.country"></p>
+                    </template>
+                    <template x-if="editing">
+                      <input
+                        type="text"
+                        x-model="currentBuyer.country"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      />
+                    </template>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Contact Information -->
+              <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Contact Information</h2>
+
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Contact Name</label>
+                    <template x-if="!editing">
+                      <p class="text-gray-900 dark:text-white" x-text="currentBuyer.contactName"></p>
+                    </template>
+                    <template x-if="editing">
+                      <input
+                        type="text"
+                        x-model="currentBuyer.contactName"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      />
+                    </template>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Email</label>
+                    <template x-if="!editing">
+                      <p class="text-gray-900 dark:text-white" x-text="currentBuyer.contactEmail"></p>
+                    </template>
+                    <template x-if="editing">
+                      <input
+                        type="email"
+                        x-model="currentBuyer.contactEmail"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      />
+                    </template>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Phone</label>
+                    <template x-if="!editing">
+                      <p class="text-gray-900 dark:text-white" x-text="currentBuyer.contactPhone"></p>
+                    </template>
+                    <template x-if="editing">
+                      <input
+                        type="tel"
+                        x-model="currentBuyer.contactPhone"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      />
+                    </template>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Payment Terms -->
+              <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Payment Terms</h2>
+
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Payment Terms</label>
+                    <template x-if="!editing">
+                      <p class="text-gray-900 dark:text-white" x-text="currentBuyer.paymentTerms"></p>
+                    </template>
+                    <template x-if="editing">
+                      <select
+                        x-model="currentBuyer.paymentTerms"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      >
+                        <option value="7 days">7 days</option>
+                        <option value="14 days">14 days</option>
+                        <option value="30 days">30 days</option>
+                        <option value="60 days">60 days</option>
+                        <option value="Wire on delivery">Wire on delivery</option>
+                      </select>
+                    </template>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Credit Limit</label>
+                    <template x-if="!editing">
+                      <p class="text-gray-900 dark:text-white" x-text="formatCurrency(currentBuyer.creditLimit)"></p>
+                    </template>
+                    <template x-if="editing">
+                      <input
+                        type="number"
+                        x-model="currentBuyer.creditLimit"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      />
+                    </template>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Currency</label>
+                    <template x-if="!editing">
+                      <p class="text-gray-900 dark:text-white" x-text="currentBuyer.currency"></p>
+                    </template>
+                    <template x-if="editing">
+                      <select
+                        x-model="currentBuyer.currency"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      >
+                        <option value="GBP">GBP (£)</option>
+                        <option value="EUR">EUR (€)</option>
+                        <option value="USD">USD ($)</option>
+                        <option value="CHF">CHF</option>
+                      </select>
+                    </template>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Notes & Preferences -->
+              <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Notes & Preferences</h2>
+
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Internal Notes</label>
+                    <template x-if="!editing">
+                      <p class="text-gray-900 dark:text-white" x-text="currentBuyer.notes"></p>
+                    </template>
+                    <template x-if="editing">
+                      <textarea
+                        x-model="currentBuyer.notes"
+                        rows="3"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      ></textarea>
+                    </template>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Buying Preferences</label>
+                    <template x-if="!editing">
+                      <p class="text-gray-900 dark:text-white" x-text="currentBuyer.preferences"></p>
+                    </template>
+                    <template x-if="editing">
+                      <textarea
+                        x-model="currentBuyer.preferences"
+                        rows="3"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      ></textarea>
+                    </template>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+  </body>
+</html>
